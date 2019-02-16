@@ -14,14 +14,11 @@
 ##############################################################################
 set (tools_dir ${CMAKE_BINARY_DIR}/tools)
 
-blt_add_executable(
-  NAME replay
-  SOURCES replay.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tools_dir})
+umpire_add_executable(replay.cpp ${tools_dir} umpire_tools)
 
-blt_add_executable(
-  NAME replay_allocation_map
-  SOURCES replay_allocation_map.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tools_dir})
+umpire_add_executable(replay_allocation_map.cpp ${tools_dir} umpire_tools)
+
+install(TARGETS
+  ${umpire_tools}
+  EXPORT umpire-targets
+  RUNTIME DESTINATION bin/tools)

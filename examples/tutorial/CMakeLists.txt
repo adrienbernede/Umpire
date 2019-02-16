@@ -14,68 +14,29 @@
 ##############################################################################
 set (tutorial_dir ${UMPIRE_EXAMPLES_OUTPUT_DIR}/tutorial)
 
-blt_add_executable(
-  NAME tut_allocator
-  SOURCES tut_allocator.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_allocator.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_resources
-  SOURCES tut_resources.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_resources.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_dynamic_pool_1
-  SOURCES tut_dynamic_pool_1.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_dynamic_pool_1.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_dynamic_pool_2
-  SOURCES tut_dynamic_pool_2.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_dynamic_pool_2.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_copy
-  SOURCES tut_copy.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_copy.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_move
-  SOURCES tut_move.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_move.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_memset
-  SOURCES tut_memset.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_memset.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_reallocate
-  SOURCES tut_reallocate.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_reallocate.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_typed_allocator
-  SOURCES tut_typed_allocator.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_typed_allocator.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_introspection
-  SOURCES tut_introspection.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_introspection.cpp ${tutorial_dir} umpire_tutorial)
 
-blt_add_executable(
-  NAME tut_replay
-  SOURCES tut_replay.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${tutorial_dir})
+umpire_add_executable(tut_replay.cpp ${tutorial_dir} umpire_tutorial)
+
+install(TARGETS
+  ${umpire_tutorial}
+  EXPORT umpire-targets
+  RUNTIME DESTINATION bin/examples/tutorial)

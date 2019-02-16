@@ -14,45 +14,24 @@
 ##############################################################################
 set (examples_dir ${UMPIRE_EXAMPLES_OUTPUT_DIR})
 
-blt_add_executable(
-  NAME malloc
-  SOURCES malloc.cxx
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${examples_dir})
-
-blt_add_executable(
-  NAME strategy_example
-  SOURCES strategy_example.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${examples_dir})
+umpire_add_executable(malloc.cxx ${examples_dir} umpire_examples)
+umpire_add_executable(strategy_example.cpp ${examples_dir} umpire_examples)
 
 if (ENABLE_C_API)
-  blt_add_executable(
-    NAME allocator_c
-    SOURCES allocator.c
-    DEPENDS_ON umpire
-    OUTPUT_DIR ${examples_dir})
+  umpire_add_executable(allocator_c.c ${examples_dir} umpire_examples)
 endif ()
 
-blt_add_executable(
-  NAME vector_allocator
-  SOURCES vector_allocator.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${examples_dir})
-
-blt_add_executable(
-  NAME size_limiter
-  SOURCES size_limiter.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${examples_dir})
+umpire_add_executable(vector_allocator.cpp ${examples_dir} umpire_examples)
+umpire_add_executable(size_limiter.cpp ${examples_dir} umpire_examples)
 
 if (ENABLE_STATISTICS)
-  blt_add_executable(
-    NAME statistics_example
-    SOURCES statistics.cpp
-    DEPENDS_ON umpire
-    OUTPUT_DIR ${examples_dir})
-endif()
+  umpire_add_executable(statistics_example.cpp ${examples_dir} umpire_examples)
+endif ()
+
+install(TARGETS
+  ${umpire_examples}
+  EXPORT umpire-targets
+  RUNTIME DESTINATION bin/examples)
 
 add_subdirectory(tutorial)
 

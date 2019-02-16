@@ -14,40 +14,18 @@
 ##############################################################################
 set (cookbook_dir ${UMPIRE_EXAMPLES_OUTPUT_DIR}/cookbook)
 
-blt_add_executable(
-  NAME recipe_no_introspection
-  SOURCES recipe_no_introspection.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${cookbook_dir})
+umpire_add_executable(recipe_no_introspection.cpp ${cookbook_dir} umpire_cookbook)
 
 if (ENABLE_CUDA)
-  blt_add_executable(
-    NAME recipe_shrink
-    SOURCES recipe_shrink.cpp
-    DEPENDS_ON umpire
-    OUTPUT_DIR ${cookbook_dir})
-
-  blt_add_executable(
-    NAME recipe_advice_device_id
-    SOURCES recipe_advice_device_id.cpp
-    DEPENDS_ON umpire
-    OUTPUT_DIR ${cookbook_dir})
-
-  blt_add_executable(
-    NAME recipe_pool_advice
-    SOURCES recipe_pool_advice.cpp
-    DEPENDS_ON umpire
-    OUTPUT_DIR ${cookbook_dir})
-
-  blt_add_executable(
-    NAME recipe_move_to_managed
-    SOURCES recipe_move_to_managed.cpp
-    DEPENDS_ON umpire
-    OUTPUT_DIR ${cookbook_dir})
+  umpire_add_executable(recipe_shrink.cpp ${cookbook_dir} umpire_cookbook)
+  umpire_add_executable(recipe_advice_device_id.cpp ${cookbook_dir} umpire_cookbook)
+  umpire_add_executable(recipe_pool_advice.cpp ${cookbook_dir} umpire_cookbook)
+  umpire_add_executable(recipe_move_to_managed.cpp ${cookbook_dir} umpire_cookbook)
 endif ()
 
-blt_add_executable(
-  NAME recipe_dynamic_pool_heuristic
-  SOURCES recipe_dynamic_pool_heuristic.cpp
-  DEPENDS_ON umpire
-  OUTPUT_DIR ${cookbook_dir})
+umpire_add_executable(recipe_dynamic_pool_heuristic.cpp ${cookbook_dir} umpire_cookbook)
+
+install(TARGETS
+  ${umpire_cookbook}
+  EXPORT umpire-targets
+  RUNTIME DESTINATION bin/examples/cookbook)

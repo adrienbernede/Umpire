@@ -77,6 +77,7 @@ if (NOT BLT_LOADED)
 endif()
 
 
+include(cmake/SetupMacros.cmake)
 include(cmake/SetupCompilerFlags.cmake)
 include(cmake/SetupUmpireThirdParty.cmake)
 
