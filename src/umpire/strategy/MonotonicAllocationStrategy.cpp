@@ -34,6 +34,27 @@ MonotonicAllocationStrategy::MonotonicAllocationStrategy(
   m_block = m_allocator->allocate(m_capacity);
 }
 
+MonotonicAllocationStrategy::~MonotonicAllocationStrategy()
+{
+  free();
+}
+
+void
+MonotonicAllocationStrategy::finalize()
+{
+  free();
+  m_allocator->finalize();
+}
+
+void MonotonicAllocationStrategy::free()
+{
+  if (m_block)
+  {
+    m_allocator->deallocate(m_block);
+    m_block = nullptr;
+  }
+}
+
 void*
 MonotonicAllocationStrategy::allocate(size_t bytes)
 {

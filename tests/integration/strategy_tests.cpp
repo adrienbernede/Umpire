@@ -338,7 +338,7 @@ TEST(SizeLimiter, Host)
 {
   auto& rm = umpire::ResourceManager::getInstance();
 
-  auto alloc = rm.makeAllocator<umpire::strategy::SizeLimiter>(
+  auto alloc = rm.makeAllocator<umpire::strategy::SizeLimiter, false>(
       "size_limited_alloc", rm.getAllocator("HOST"), 64);
 
   void* data = nullptr;
@@ -590,3 +590,15 @@ TEST(NumaPolicyTest, Location) {
 }
 
 #endif // defined(UMPIRE_ENABLE_NUMA)
+
+
+int main( int argc, char* argv[] )
+{
+  int result = 0;
+  testing::InitGoogleTest( &argc, argv );
+  result = RUN_ALL_TESTS();
+
+  umpire::ResourceManager::getInstance().finalize();
+
+  return result;
+}

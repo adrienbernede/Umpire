@@ -32,10 +32,29 @@ DynamicPool::DynamicPool(
   :
   AllocationStrategy(name, id),
   dpa(nullptr),
+  m_finalized(false),
   m_allocator(allocator.getAllocationStrategy()),
   do_coalesce{coalesce_heuristic}
 {
   dpa = new DynamicSizePool<>(m_allocator, min_initial_alloc_size, min_alloc_size);
+}
+
+DynamicPool::~DynamicPool()
+{
+  free();
+}
+
+void DynamicPool::finalize()
+{
+  m_finalized = true;
+  free();
+  m_allocator->finalize();
+}
+
+void DynamicPool::free()
+{
+  delete dpa;
+  dpa = nullptr;
 }
 
 void*
@@ -50,6 +69,8 @@ DynamicPool::allocate(size_t bytes)
 void
 DynamicPool::deallocate(void* ptr)
 {
+  if (m_finalized) return;
+
   UMPIRE_LOG(Debug, "(ptr=" << ptr << ")");
   dpa->deallocate(ptr);
 

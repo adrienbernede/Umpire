@@ -106,6 +106,22 @@ ResourceManager::ResourceManager() :
   UMPIRE_LOG(Debug, "() leaving");
 }
 
+ResourceManager::~ResourceManager()
+{
+  for (auto & kvp : m_allocators_by_id)
+  {
+    kvp.second->finalize();
+  }
+
+  for (auto & kvp : m_allocators_by_id)
+  {
+    delete kvp.second;
+    kvp.second = nullptr;
+  }
+
+  delete m_mutex;
+}
+
 void
 ResourceManager::initialize()
 {
@@ -184,6 +200,17 @@ ResourceManager::initialize()
 #endif
 
   UMPIRE_LOG(Debug, "() leaving");
+}
+
+void
+ResourceManager::finalize()
+{ 
+  delete s_resource_manager_instance;
+  s_resource_manager_instance = nullptr;
+  op::MemoryOperationRegistry::finalize();
+  resource::MemoryResourceRegistry::finalize();
+  umpire::replay::Replay::getReplayLogger()->finalize();
+  umpire::util::Logger::finalize();
 }
 
 strategy::AllocationStrategy*

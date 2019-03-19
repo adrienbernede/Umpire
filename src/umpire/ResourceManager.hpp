@@ -47,6 +47,8 @@ class ResourceManager {
      */
     void initialize();
 
+    void finalize();
+
     /*!
      * \brief Get the names of all available Allocator objects.
      */
@@ -235,7 +237,7 @@ class ResourceManager {
   private:
     ResourceManager();
 
-    ~ResourceManager() = default;
+    ~ResourceManager();
 
     ResourceManager (const ResourceManager&) = delete;
     ResourceManager& operator= (const ResourceManager&) = delete;

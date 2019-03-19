@@ -71,6 +71,7 @@ FixedPool<T, NP, IA>::FixedPool(
   m_num_blocks(0),
   m_highwatermark(0),
   m_current_size(0),
+  m_finalized(false),
   m_allocator(allocator.getAllocationStrategy())
 {
   newPool(&m_pool);
@@ -78,6 +79,18 @@ FixedPool<T, NP, IA>::FixedPool(
 
 template <typename T, int NP, typename IA>
 FixedPool<T, NP, IA>::~FixedPool() {
+  free();
+}
+
+template <typename T, int NP, typename IA>
+void FixedPool<T, NP, IA>::finalize() {
+  m_finalized = true;
+  free();
+  m_allocator->finalize();
+}
+
+template <typename T, int NP, typename IA>
+void FixedPool<T, NP, IA>::free() {
   for (struct Pool *curr = m_pool; curr; ) {
     struct Pool *next = curr->next;
     m_allocator->deallocate(curr->data);
@@ -117,6 +130,8 @@ FixedPool<T, NP, IA>::allocate(size_t bytes) {
 template <typename T, int NP, typename IA>
 void
 FixedPool<T,NP, IA>::deallocate(void* ptr) {
+  if (m_finalized) return;
+
   T* t_ptr = static_cast<T*>(ptr);
 
   int i = 0;
