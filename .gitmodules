@@ -7,3 +7,6 @@
 [submodule "src/umpire/tpl/cxxopts"]
 	path = src/umpire/tpl/cxxopts
 	url = https://github.com/LLNL/cxxopts.git
+[submodule "radiuss-ci-config"]
+	path = radiuss-ci-config
+	url = https://github.com/adrienbernede/radiuss-ci-config.git
