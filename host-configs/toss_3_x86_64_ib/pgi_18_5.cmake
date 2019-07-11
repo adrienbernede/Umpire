@@ -12,6 +12,3 @@
 # For details, see https://github.com/LLNL/Umpire
 # Please also see the LICENSE file for MIT license.
 ##############################################################################
-set(CMAKE_C_COMPILER "/usr/tce/packages/pgi/pgi-18.5/bin/pgcc" CACHE PATH "")
-set(CMAKE_CXX_COMPILER "/usr/tce/packages/pgi/pgi-18.5/bin/pgc++" CACHE PATH "")
-set(CMAKE_Fortran_COMPILER "/usr/tce/packages/pgi/pgi-18.5/bin/pgfortran" CACHE PATH "")
