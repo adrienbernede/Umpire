@@ -12,3 +12,7 @@
 # For details, see https://github.com/LLNL/Umpire
 # Please also see the LICENSE file for MIT license.
 ##############################################################################
+
+set (CUDA_TOOLKIT_ROOT_DIR "/usr/tce/packages/cuda/cuda-9.1.85" CACHE PATH "")
+
+set (CMAKE_CUDA_COMPILER "/usr/tce/packages/cuda/cuda-9.1.85/bin/nvcc" CACHE PATH "")

@@ -12,3 +12,8 @@
 # For details, see https://github.com/LLNL/Umpire
 # Please also see the LICENSE file for MIT license.
 ##############################################################################
+set(CMAKE_CXX_COMPILER "/usr/tce/packages/intel/intel-17.0.2/bin/icpc" CACHE PATH "")
+set(CMAKE_C_COMPILER "/usr/tce/packages/intel/intel-17.0.2/bin/icc" CACHE PATH "")
+set(CMAKE_Fortran_COMPILER "/usr/tce/packages/intel/intel-17.0.2/bin/ifort" CACHE PATH "")
+
+set(COMMON_FLAGS "-gxx-name=/usr/tce/packages/gcc/gcc-4.9.3/bin/g++ -std=c++17")

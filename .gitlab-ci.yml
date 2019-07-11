@@ -1,0 +1,26 @@
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+before_script:
+  - date
+
+after_script:
+  - date
+
+# There are no tests for now
+stages:
+  - build
+  - test
+
+# This is not a job, but contains project specific build commands
+.build_script:
+  script:
+    - srun -p pdebug -t 10 -N 1 -n 1 -c 4 .gitlab/scripts/build.sh
+
+
+# This is where jobs are included
+include:
+  local: .gitlab/ci/build.yml
+
+
