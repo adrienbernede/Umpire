@@ -22,7 +22,8 @@ build_quartz:
   script:
     - mkdir build_${CLUSTER}_${COMPILER}
     - cd build_${CLUSTER}_${COMPILER}
-    - CCONF=”host-configs/${CLUSTER}/${COMPILER}.cmake” cmake -C ../radiuss-ci-config/${CCONF} -C ../${CCONF}
+    - export CCONF=”host-configs/${CLUSTER}/${COMPILER}.cmake” 
+    - cmake -C ../radiuss-ci-config/${CCONF} -C ../${CCONF}
     - cmake --build .
     - make test
 
