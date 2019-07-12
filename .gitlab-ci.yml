@@ -1,0 +1,29 @@
+
+before_script:
+  - date
+  - git submodule init
+  - git submodule update
+
+after_script:
+  - date
+
+stages:
+  - build
+  - test
+
+build_quartz:
+  tags:
+    - shell
+    - quartz
+  stage: build
+  variables:
+    CLUSTER: "toss_3_x86_64_ib"
+    COMPILER: "clang_3_9_1"
+  script:
+    - mkdir build_${CLUSTER}_${COMPILER}
+    - cd build_${CLUSTER}_${COMPILER}
+    - export CCONF=host-configs/${CLUSTER}/${COMPILER}.cmake 
+    - cmake -C ../radiuss-ci-config/${CCONF} -C ../${CCONF} ..
+    - cmake --build .
+    - make test
+
