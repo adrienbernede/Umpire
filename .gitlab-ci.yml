@@ -12,6 +12,15 @@ stages:
   - build
   - test
 
+.build_script:
+  script:
+    - mkdir build_${CLUSTER}_${COMPILER}
+    - cd build_${CLUSTER}_${COMPILER}
+    - export CCONF=host-configs/${CLUSTER}/${COMPILER}.cmake 
+    - cmake -C ../radiuss-ci-config/${CCONF} -C ../${CCONF} ..
+    - cmake --build .
+    - make test
+
 build_quartz_clang:
   tags:
     - shell
@@ -20,13 +29,7 @@ build_quartz_clang:
   variables:
     CLUSTER: "toss_3_x86_64_ib"
     COMPILER: "clang_3_9_1"
-  script:
-    - mkdir build_${CLUSTER}_${COMPILER}
-    - cd build_${CLUSTER}_${COMPILER}
-    - export CCONF=host-configs/${CLUSTER}/${COMPILER}.cmake 
-    - cmake -C ../radiuss-ci-config/${CCONF} -C ../${CCONF} ..
-    - cmake --build .
-    - make test
+  extends: .build_script
 
 build_quartz_gcc:
   tags:
@@ -36,11 +39,5 @@ build_quartz_gcc:
   variables:
     CLUSTER: "toss_3_x86_64_ib"
     COMPILER: "gcc_4_9_3"
-  script:
-    - mkdir build_${CLUSTER}_${COMPILER}
-    - cd build_${CLUSTER}_${COMPILER}
-    - export CCONF=host-configs/${CLUSTER}/${COMPILER}.cmake 
-    - cmake -C ../radiuss-ci-config/${CCONF} -C ../${CCONF} ..
-    - cmake --build .
-    - make test
+  extends: .build_script
 
