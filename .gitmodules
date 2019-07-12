@@ -9,4 +9,4 @@
 	url = https://github.com/LLNL/cxxopts.git
 [submodule "radiuss-ci-config"]
 	path = radiuss-ci-config
-	url = https://github.com/adrienbernede/radiuss-ci-config.git
+	url = ../../radiuss/lc-ci-config.git
