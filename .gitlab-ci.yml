@@ -4,6 +4,7 @@ variables:
 
 before_script:
   - date
+  - 
 
 after_script:
   - date
@@ -18,7 +19,7 @@ stages:
     - cd build_${CLUSTER}_${COMPILER}
     - export CCONF=host-configs/${CLUSTER}/${COMPILER}.cmake 
     - cmake -C ../radiuss-ci-config/${CCONF} -C ../${CCONF} ..
-    - cmake --build .
+    - srun -p pdebug -t 5 -N 1 -n 4 cmake --build -j 4 .
     - make test
 
 build_quartz_clang:
@@ -39,5 +40,4 @@ build_quartz_gcc:
   variables:
     CLUSTER: "toss_3_x86_64_ib"
     COMPILER: "gcc_4_9_3"
-  extends: .build_script
 
