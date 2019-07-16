@@ -14,7 +14,7 @@ stages:
 
 .build_script:
   script:
-    - srun -p pdebug -t 10 -N 1 -n 4 scripts/launch.sh
+    - srun -p pdebug -t 10 -N 1 -n 1 -c 36 scripts/launch.sh
 
 build_quartz_clang:
   tags:
