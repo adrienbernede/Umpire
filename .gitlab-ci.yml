@@ -39,4 +39,4 @@ build_quartz_gcc:
   variables:
     CLUSTER: "toss_3_x86_64_ib"
     COMPILER: "gcc_4_9_3"
-  exdends: .build_script
+  extends: .build_script
