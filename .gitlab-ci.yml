@@ -4,7 +4,6 @@ variables:
 
 before_script:
   - date
-  - 
 
 after_script:
   - date
