@@ -14,7 +14,7 @@ stages:
 
 .build_script:
   script:
-    - ./launch.sh
+    - scripts/launch.sh
 
 build_quartz_clang:
   tags:
