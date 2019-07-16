@@ -14,18 +14,7 @@ stages:
 
 .build_script:
   script:
-    - |
-      cat > launch.sh << EOF
-      mkdir build_${CLUSTER}_${COMPILER}
-      cd build_${CLUSTER}_${COMPILER}
-      export CCONF=host-configs/${CLUSTER}/${COMPILER}.cmake 
-      cmake -C ../radiuss-ci-config/${CCONF} -C ../${CCONF} ..
-      srun -p pdebug -t 5 -N 1 -n 4 cmake --build -j 4 .
-      make test
-      EOF
-    - cat launch.sh
-    - chmod u+x launch.sh
-    - ./launch.sh
+    - srun -p pdebug -t 10 -N 1 -n 1 -c 4 scripts/launch.sh
 
 build_quartz_clang:
   tags:
