@@ -23,5 +23,5 @@ stages:
 #   - cluster-template is mandatory for build-template, 
 #     and will probably be for test-template as well.
 include:
-  cluster-template.yml 
-  build-template.yml
+  - cluster-template.yml 
+  - build-template.yml
