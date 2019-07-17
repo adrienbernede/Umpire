@@ -1,6 +1,8 @@
 
 
 .build_quartz:
+  variables:
+    CLUSTER: "toss_3_x86_64_ib"
   tags:
     - shell
     - quartz
@@ -8,17 +10,12 @@
   extends: .build_script
 
 
-# Impossible to extend at the last level (variables in this case)
-# So CLUSTER definition cannot be moved to .build_quartz
-
 build_quartz_clang:
   variables:
-    CLUSTER: "toss_3_x86_64_ib"
     COMPILER: "clang_3_9_1"
   extends: .build_quartz
 
 build_quartz_gcc:
   variables:
-    CLUSTER: "toss_3_x86_64_ib"
     COMPILER: "gcc_4_9_3"
   extends: .build_quartz
