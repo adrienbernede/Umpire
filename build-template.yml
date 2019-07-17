@@ -11,65 +11,76 @@
 build_quartz_clang_3_9_1:
   variables:
     COMPILER: "clang_3_9_1"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_gcc_4_9_3:
   variables:
     COMPILER: "gcc_4_9_3"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_clang_4_0_0:
   variables:
     COMPILER: "clang_4_0_0"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_cudatoolkit_9_1:
   variables:
     COMPILER: "cudatoolkit_9_1"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_gcc_6_1_0:
   variables:
     COMPILER: "gcc_6_1_0"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_gcc_7_1_0:
   variables:
     COMPILER: "gcc_7_1_0"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_icpc_16_0_4:
   variables:
     COMPILER: "icpc_16_0_4"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_icpc_17_0_2:
   variables:
     COMPILER: "icpc_17_0_2"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_icpc_18_0_0:
   variables:
     COMPILER: "icpc_18_0_0"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_pgi_17_10:
   variables:
     COMPILER: "pgi_17_10"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
 
 build_quartz_pgi_18_5:
   variables:
     COMPILER: "pgi_18_5"
-  extends: .cluster_quartz
-  extends: .build
+  extends: 
+    - .cluster_quartz
+    - .build
