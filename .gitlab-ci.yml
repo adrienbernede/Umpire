@@ -16,22 +16,5 @@ stages:
   script:
     - srun -p pdebug -t 10 -N 1 -n 1 -c 4 scripts/launch.sh
 
-build_quartz_clang:
-  tags:
-    - shell
-    - quartz
-  stage: build
-  variables:
-    CLUSTER: "toss_3_x86_64_ib"
-    COMPILER: "clang_3_9_1"
-  extends: .build_script
-
-build_quartz_gcc:
-  tags:
-    - shell
-    - quartz
-  stage: build
-  variables:
-    CLUSTER: "toss_3_x86_64_ib"
-    COMPILER: "gcc_4_9_3"
-  extends: .build_script
+include:
+  build-template.yml
