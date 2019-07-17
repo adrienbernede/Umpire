@@ -1,0 +1,9 @@
+
+# This is the shared configuration of jobs for quartz
+.cluster_quartz:
+  variables:
+    CLUSTER: "toss_3_x86_64_ib"
+  tags:
+    - shell
+    - quartz
+

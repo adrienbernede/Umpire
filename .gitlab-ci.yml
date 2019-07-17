@@ -18,7 +18,10 @@ stages:
   script:
     - srun -p pdebug -t 10 -N 1 -n 1 -c 4 scripts/launch.sh
 
-
 # This is where jobs are included
+# Note : 
+#   - cluster-template is mandatory for build-template, 
+#     and will probably be for test-template as well.
 include:
+  cluster-template.yml 
   build-template.yml
