@@ -39,27 +39,27 @@ build_quartz_gcc_7_1_0:
     COMPILER: "gcc_7_1_0"
   extends: .build_quartz
 
-build_quartz_gcc_16_0_4:
+build_quartz_icpc_16_0_4:
   variables:
     COMPILER: "icpc_16_0_4"
   extends: .build_quartz
 
-build_quartz_gcc_17_0_2:
+build_quartz_icpc_17_0_2:
   variables:
     COMPILER: "icpc_17_0_2"
   extends: .build_quartz
 
-build_quartz_gcc_18_0_0:
+build_quartz_icpc_18_0_0:
   variables:
     COMPILER: "icpc_18_0_0"
   extends: .build_quartz
 
-build_quartz_gcc_17_10:
+build_quartz_pgi_17_10:
   variables:
     COMPILER: "pgi_17_10"
   extends: .build_quartz
 
-build_quartz_gcc_18_5:
+build_quartz_pgi_18_5:
   variables:
     COMPILER: "pgi_18_5"
   extends: .build_quartz
