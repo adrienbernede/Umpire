@@ -1,7 +1,7 @@
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-  CI_CONFIG_PATH: "https://lc.llnl.gov/gitlab/radiuss/lc-ci-config/tree/test-ci-inclusion"
+  CI_CONFIG_PATH: "https://lc.llnl.gov/gitlab/radiuss/lc-ci-config/raw/test-ci-inclusion"
 
 before_script:
   - date
@@ -21,7 +21,6 @@ stages:
 
 
 # This is where jobs are included
-include:
-  ${CI_CONFIG_PATH}/build-template.yml
+include: "${CI_CONFIG_PATH}/build-template.yml"
 
 
