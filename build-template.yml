@@ -5,7 +5,7 @@
     - shell
     - quartz
   stage: build
-  extends: .build_scripts
+  extends: .build_script
 
 
 # Impossible to extend at the last level (variables in this case)
