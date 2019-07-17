@@ -21,6 +21,6 @@ stages:
 
 
 # This is where jobs are included
-include: "${CI_CONFIG_PATH}/build-template.yml"
+include: "https://lc.llnl.gov/gitlab/radiuss/lc-ci-config/raw/test-ci-inclusion/build-template.yml"
 
 
