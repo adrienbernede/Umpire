@@ -8,13 +8,17 @@ before_script:
 after_script:
   - date
 
+# There are no tests for now
 stages:
   - build
   - test
 
+# This is not a job, but contains project specific build commands
 .build_script:
   script:
     - srun -p pdebug -t 10 -N 1 -n 1 -c 4 scripts/launch.sh
 
+
+# This is where jobs are included
 include:
   build-template.yml

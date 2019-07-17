@@ -1,4 +1,5 @@
-
+####
+# This is the share configuration of jobs for quartz
 
 .build_quartz:
   variables:
@@ -8,6 +9,9 @@
     - quartz
   stage: build
   extends: .build_script
+
+####
+# Here are all quartz build jobs
 
 build_quartz_clang_3_9_1:
   variables:
