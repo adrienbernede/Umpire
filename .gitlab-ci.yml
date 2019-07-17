@@ -1,7 +1,7 @@
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
-  CI_CONFIG_PATH: "https://lc.llnl.gov/gitlab/radiuss/lc-ci-config/tree/master"
+  CI_CONFIG_PATH: "https://lc.llnl.gov/gitlab/radiuss/lc-ci-config/tree/test-ci-inclusion"
 
 before_script:
   - date
