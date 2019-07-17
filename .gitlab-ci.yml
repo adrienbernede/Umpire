@@ -1,6 +1,7 @@
 
 variables:
   GIT_SUBMODULE_STRATEGY: recursive
+  CI_CONFIG_PATH: "https://lc.llnl.gov/gitlab/radiuss/lc-ci-config/tree/master"
 
 before_script:
   - date
@@ -21,4 +22,6 @@ stages:
 
 # This is where jobs are included
 include:
-  build-template.yml
+  ${CI_CONFIG_PATH}/build-template.yml
+
+
