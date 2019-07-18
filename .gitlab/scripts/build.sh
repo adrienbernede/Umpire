@@ -16,8 +16,8 @@
 
 hostname
 
-BUILD_SUFFIX=${CLUSTER}_${COMPILER}
-CCONF=host-configs/${CLUSTER}/${COMPILER}.cmake 
+BUILD_SUFFIX="${CLUSTER}_${COMPILER}"
+CCONF="host-configs/${CLUSTER}/${COMPILER}.cmake" 
 
 rm -rf build_${BUILD_SUFFIX} 2>/dev/null
 mkdir build_${BUILD_SUFFIX} && cd build_${BUILD_SUFFIX}
@@ -27,4 +27,4 @@ cmake \
   -C ../${CCONF} \
   ..
 cmake --build -j 4 .
-cmake test
+make test
