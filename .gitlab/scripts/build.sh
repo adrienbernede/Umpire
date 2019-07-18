@@ -26,5 +26,5 @@ cmake \
   -C ../.gitlab/conf/${CCONF} \
   -C ../${CCONF} \
   ..
-cmake --build -j 4 .
+cmake --build . -j 4
 make test
