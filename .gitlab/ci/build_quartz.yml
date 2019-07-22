@@ -8,7 +8,7 @@
     - shell
     - quartz
   stage: build
-  extends: .build_script
+  extends: .build_quartz_script
 
 ####
 # Here are all quartz build jobs

@@ -8,7 +8,7 @@
     - shell
     - butte
   stage: build
-  extends: .build_script
+  extends: .build_butte_script
 
 ####
 # Here are all butte build jobs
