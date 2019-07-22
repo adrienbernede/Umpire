@@ -12,7 +12,3 @@
 # For details, see https://github.com/LLNL/Umpire
 # Please also see the LICENSE file for MIT license.
 ##############################################################################
-
-set(CMAKE_CXX_COMPILER "/usr/tcetmp/bin/g++" CACHE PATH "")
-set(CMAKE_C_COMPILER "/usr/tcetmp/bin/gcc" CACHE PATH "")
-set(CMAKE_Fortran_COMPILER "/usr/tcetmp/bin/gfortran" CACHE PATH "")
