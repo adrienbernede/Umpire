@@ -10,13 +10,16 @@ after_script:
 
 # There are no tests for now
 stages:
+  - pre-build
   - build
+  - post-build
   - test
 
 # This is not a job, but contains project specific build commands
 .build_quartz_script:
   script:
-    - srun -p pdebug -t 10 -N 1 -n 1 -c 4 .gitlab/scripts/build.sh
+    - squeue -h --name=ci_build_quartz
+    - srun --jobid=$CI_BUILD_QUARTZ_JOBID -t 10 -N 1 -n 1 -c 4 .gitlab/scripts/build.sh
 
 # Butte uses a very different job allocation system, building on login nodes is recommended
 .build_butte_script:

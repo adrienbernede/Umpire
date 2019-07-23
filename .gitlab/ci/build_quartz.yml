@@ -1,6 +1,23 @@
 ####
 # This is the share configuration of jobs for quartz
 
+allocate_resources_build_quartz:
+  tags:
+    - shell
+    - quartz
+  stage: pre-build
+  script:
+    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=ci_build_quartz
+    - export CI_BUILD_QUARTZ_JOBID=$(squeue -h --name=ci_build_quartz --format=%A)
+
+release_resources_build_quartz:
+  tags:
+    - shell
+    - quartz
+  stage: post-build
+  script:
+    - scancel $CI_BUILD_QUARTZ_JOBID
+
 .build_quartz:
   variables:
     CLUSTER: "toss_3_x86_64_ib"
