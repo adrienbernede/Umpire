@@ -19,7 +19,7 @@ stages:
 .build_quartz_script:
   script:
     - squeue -h --name=ci_build_quartz
-    - srun --jobid=$CI_BUILD_QUARTZ_JOBID -t 10 -N 1 -n 1 -c 4 .gitlab/scripts/build.sh
+    - srun --jobid=$(squeue -h --name=ci_build_quartz --format=%A) -t 10 -N 1 -n 1 -c 4 .gitlab/scripts/build.sh
 
 # Butte uses a very different job allocation system, building on login nodes is recommended
 .build_butte_script:
