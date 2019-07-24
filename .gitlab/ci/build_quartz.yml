@@ -15,7 +15,8 @@ release_resources_build_quartz:
     - quartz
   stage: post-build
   script:
-    - scancel $CI_BUILD_QUARTZ_JOBID
+    - scancel $(squeue -h --name=ci_build_quartz --format=%A)
+  when: always
 
 .build_quartz:
   variables:
@@ -63,6 +64,7 @@ build_quartz_icpc_16_0_4:
   variables:
     COMPILER: "icpc_16_0_4"
   extends: .build_quartz
+  allow_failure: true
 
 build_quartz_icpc_17_0_2:
   variables:
@@ -78,8 +80,10 @@ build_quartz_pgi_17_10:
   variables:
     COMPILER: "pgi_17_10"
   extends: .build_quartz
+  allow_failure: true
 
 build_quartz_pgi_18_5:
   variables:
     COMPILER: "pgi_18_5"
   extends: .build_quartz
+  allow_failure: true
