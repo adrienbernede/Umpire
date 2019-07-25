@@ -9,6 +9,8 @@
     - butte
   stage: build
   extends: .build_butte_script
+  except:
+    - /_bnone/
 
 ####
 # Here are all butte build jobs
