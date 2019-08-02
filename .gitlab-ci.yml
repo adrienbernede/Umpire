@@ -1,0 +1,36 @@
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+  BUILD_QUARTZ_ALLOC_NAME: "umpire_ci_build_on_quartz"
+
+before_script:
+  - date
+
+after_script:
+  - date
+
+# There are no tests for now
+stages:
+  - pre-build
+  - build
+  - post-build
+  - test
+
+# This is not a job, but contains project specific build commands
+.build_quartz_script:
+  script:
+    - squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME}
+    - srun --jobid=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A) -t 10 -N 1 -n 1 -c 4 scripts/gitlab/build.sh
+
+# Butte uses a very different job allocation system, building on login nodes is recommended
+.build_butte_script:
+  script:
+    - lalloc 1 scripts/gitlab/build.sh
+
+
+# This is where jobs are included
+include:
+  - local: .gitlab/ci/build_quartz.yml
+  - local: .gitlab/ci/build_butte.yml
+
+
