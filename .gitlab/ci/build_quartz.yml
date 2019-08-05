@@ -7,16 +7,12 @@
 
 ####
 # This is the share configuration of jobs for quartz
-
-####
-# In pre-build phase, allocate a node for builds
-allocate_resources_build_quartz:
+.quartz_common:
+  variables:
+    CLUSTER: "toss_3_x86_64_ib"
   tags:
     - shell
     - quartz
-  stage: allocate_resources
-  script:
-    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=${BUILD_QUARTZ_ALLOC_NAME}
   except:
     refs:
       - /_qnone/
@@ -24,45 +20,39 @@ allocate_resources_build_quartz:
       - $UMPIRE_CI_QUARTZ == "OFF"
 
 ####
+# In pre-build phase, allocate a node for builds
+allocate_resources_build_quartz:
+  extends: .quartz_common
+  stage: allocate_resources
+  script:
+    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=${BUILD_QUARTZ_ALLOC_NAME}
+
+####
 # In post-build phase, deallocate resources
 # Note : make sure this is run even on build phase failure
 release_resources_build_quartz:
-  tags:
-    - shell
-    - quartz
+  extends: .quartz_common
   stage: release_resources
   script:
     - export JOBID=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A)
     - ([[ -n "${JOBID}" ]] && scancel ${JOBID})
   when: always
-  except:
-    - /_qnone/
 
 ####
 # Generic qwartz job, extending build script
 .build_quartz:
-  variables:
-  tags:
-    - shell
-    - quartz
+  extends:
+    - .quartz_common
+    - .build_toss_3_x86_64_ib_script
   stage: build
-  extends: .build_toss_3_x86_64_ib_script
-  except:
-    - /_qnone/
 
 ####
 # Generic qwartz job, extending test script
 .test_quartz:
-  variables:
-    CLUSTER: "toss_3_x86_64_ib"
-  tags:
-    - shell
-    - quartz
+  extends:
+    - .quartz_common
+    - .test_toss_3_x86_64_ib_script
   stage: test
-  extends: .test_toss_3_x86_64_ib_script
-  except:
-    - /_qnone/
-
 
 ####
 # Here are all quartz build jobs
@@ -177,7 +167,6 @@ test_quartz_icpc_16_0_4:
   variables:
     COMPILER: "icpc_16_0_4"
   extends: .test_quartz
-  allow_failure: true
   dependencies:
     - build_quartz_icpc_16_0_4
 
@@ -201,6 +190,7 @@ test_quartz_pgi_17_10:
   extends: .test_quartz
   dependencies:
     - build_quartz_pgi_17_10
+  allow_failure: true
 
 test_quartz_pgi_18_5:
   variables:
@@ -208,3 +198,4 @@ test_quartz_pgi_18_5:
   extends: .test_quartz
   dependencies:
     - build_quartz_pgi_18_5
+  allow_failure: true
