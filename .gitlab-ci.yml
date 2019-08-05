@@ -32,6 +32,10 @@ stages:
   script:
     - squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME}
     - srun --jobid=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A) -t 10 -N 1 -n 1 -c 4 scripts/gitlab/build.sh --test-only
+  artifacts:
+    reports:
+      junit: Test.xml 
+
 
 # Butte uses a very different job allocation system, building on login nodes is recommended
 .build_butte_script:
