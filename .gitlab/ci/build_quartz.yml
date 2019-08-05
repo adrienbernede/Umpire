@@ -7,10 +7,9 @@
 
 ####
 # This is the share configuration of jobs for quartz
-
-####
-# In pre-build phase, allocate a node for builds
 .quartz_common:
+  variables:
+    CLUSTER: "toss_3_x86_64_ib"
   tags:
     - shell
     - quartz
@@ -42,34 +41,22 @@ release_resources_build_quartz:
     - export JOBID=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A)
     - ([[ -n "${JOBID}" ]] && scancel ${JOBID})
   when: always
-  except:
-    - /_qnone/
 
 ####
 # Generic qwartz job, extending build script
 .build_quartz:
-  variables:
-  tags:
-    - shell
-    - quartz
+  extends:
+    - .quartz_common
+    - .build_toss_3_x86_64_ib_script
   stage: build
-  extends: .build_toss_3_x86_64_ib_script
-  except:
-    - /_qnone/
 
 ####
 # Generic qwartz job, extending test script
 .test_quartz:
-  variables:
-    CLUSTER: "toss_3_x86_64_ib"
-  tags:
-    - shell
-    - quartz
+  extends:
+    - .quartz_common
+    - .test_toss_3_x86_64_ib_script
   stage: test
-  extends: .test_toss_3_x86_64_ib_script
-  except:
-    - /_qnone/
-
 
 ####
 # Here are all quartz build jobs

@@ -8,16 +8,13 @@
 
 set -e
 
-hostname
-
 PROJECT_DIRECTORY="$(pwd)"
 BUILD_DIRECTORY="${BUILD_ROOT}/build_${SYS_TYPE}_${COMPILER}"
 CCONF="host-configs/${SYS_TYPE}/${COMPILER}.cmake" 
 
+# If building, then delete everything first
 if [[ "${1}" != "--test-only" ]]
 then
-    # If building, then delete everything first
-
     rm -rf ${BUILD_DIRECTORY}
     mkdir -p ${BUILD_DIRECTORY}
 fi
@@ -46,6 +43,4 @@ fi
 if [[ "${1}" != "--build-only" ]] 
 then
     ctest -T test
-    tree Testing
-    cp Testing/*/Test.xml ${PROJECT_DIRECTORY}
 fi
