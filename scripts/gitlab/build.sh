@@ -45,5 +45,7 @@ fi
 if [[ "${1}" != "--build-only" ]] 
 then
     # If not building, then don’t
-    make test
+    ctest -T test
+    tree Testing
+    cp Testing/*/Test.xml ../
 fi
