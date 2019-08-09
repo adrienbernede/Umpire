@@ -8,8 +8,8 @@
 
 set -e
 
-BUILD_DIRECTORY="build_${CLUSTER}_${COMPILER}"
-CCONF="host-configs/${CLUSTER}/${COMPILER}.cmake" 
+BUILD_DIRECTORY="build_${SYS_TYPE}_${COMPILER}"
+CCONF="host-configs/${SYS_TYPE}/${COMPILER}.cmake" 
 
 if [[ "${1}" != "--test-only" ]]
 then
