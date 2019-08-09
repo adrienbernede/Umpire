@@ -17,7 +17,7 @@ if [[ "${1}" != "--test-only" ]]
 then
     # If building, then delete everything first
 
-    rm -rf ${BUILD_DIRECTORY} 2>/dev/null
+    rm -rf ${BUILD_DIRECTORY}
     mkdir ${BUILD_DIRECTORY}
 fi
 
@@ -28,7 +28,8 @@ then
     exit 1
 fi
 
-# Always go to build directory 
+# Always go to build directory
+echo "moving to $(pwd)/${BUILD_DIRECTORY}"
 cd ${BUILD_DIRECTORY}
 
 # Build
@@ -44,8 +45,9 @@ fi
 # Test
 if [[ "${1}" != "--build-only" ]] 
 then
-    # If not building, then don’t
+    echo "moving to $(pwd)"
     ctest -T test
+    echo "moving to $(pwd)"
     tree Testing
     cp Testing/*/Test.xml ../
 fi
