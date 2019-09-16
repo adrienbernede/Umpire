@@ -444,6 +444,6 @@ private:
   umpire::util::AllocationMap m_allocation_map;
 };
 
-#include "util/ReplayOperationManager.inl"
+#include "replay/ReplayOperationManager.inl"
 
 #endif // REPLAY_ReplayOperationManager_HPP

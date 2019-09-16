@@ -11,20 +11,20 @@ if (ENABLE_HIP)
   set(tools_depends ${tools_depends} hip_runtime)
 endif()
 
-set(replay_util_headers
-  util/ReplayInterpreter.hpp
-  util/ReplayInterpreter.inl
-  util/ReplayMacros.hpp
-  util/ReplayOperationManager.hpp
-  util/ReplayOperationManager.inl)
+set(replay_headers
+  replay/ReplayInterpreter.hpp
+  replay/ReplayInterpreter.inl
+  replay/ReplayMacros.hpp
+  replay/ReplayOperationManager.hpp
+  replay/ReplayOperationManager.inl)
 
-set(replay_util_sources
-  util/ReplayInterpreter.cpp
-  util/ReplayOperationManager.cpp)
+set(replay_sources
+  replay/ReplayInterpreter.cpp
+  replay/ReplayOperationManager.cpp)
 
 blt_add_executable(
   NAME replay
-  SOURCES replay.cpp ${replay_util_sources}
+  SOURCES replay/replay.cpp ${replay_sources}
   INCLUDES ${PROJECT_SOURCE_DIR}/tools
   DEPENDS_ON ${tools_depends}
   OUTPUT_DIR ${TOOL_OUTPUT_DIRECTORY})
@@ -35,7 +35,7 @@ target_include_directories(replay
 
 blt_add_executable(
   NAME replaydiff
-  SOURCES replaydiff.cpp ${replay_util_sources}
+  SOURCES replay/replaydiff.cpp ${replay_sources}
   INCLUDES ${PROJECT_SOURCE_DIR}/tools
   DEPENDS_ON ${tools_depends}
   OUTPUT_DIR ${TOOL_OUTPUT_DIRECTORY})

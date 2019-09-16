@@ -18,8 +18,8 @@
 #include "umpire/util/AllocationMap.hpp"
 #include "umpire/util/AllocationRecord.hpp"
 #include "umpire/ResourceManager.hpp"
-#include "util/ReplayMacros.hpp"
-#include "util/ReplayOperationManager.hpp"
+#include "replay/ReplayMacros.hpp"
+#include "replay/ReplayOperationManager.hpp"
 
 ReplayOperation::ReplayOperation(
     ReplayOperationManager& my_manager
