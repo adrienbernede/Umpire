@@ -6,6 +6,8 @@
 ##############################################################################
 
 variables:
+  GIT_DEPTH: 0
+  GIT_CLONE_PATH: $CI_BUILDS_DIR/umpire_$CI_COMMIT_REF_NAME
   GIT_SUBMODULE_STRATEGY: recursive
   BUILD_QUARTZ_ALLOC_NAME: umpire_ci_$CI_COMMIT_SHORT_SHA
 
