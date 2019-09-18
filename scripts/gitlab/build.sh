@@ -10,6 +10,7 @@ set -e
 
 hostname
 
+PROJECT_DIRECTORY="$(pwd)"
 BUILD_DIRECTORY="${BUILD_ROOT}/build_${SYS_TYPE}_${COMPILER}"
 CCONF="host-configs/${SYS_TYPE}/${COMPILER}.cmake" 
 
@@ -18,7 +19,7 @@ then
     # If building, then delete everything first
 
     rm -rf ${BUILD_DIRECTORY}
-    mkdir ${BUILD_DIRECTORY}
+    mkdir -p ${BUILD_DIRECTORY}
 fi
 
 # Assert that build directory exist (mainly for --test-only mode)
@@ -29,16 +30,16 @@ then
 fi
 
 # Always go to build directory
-echo "moving to $(pwd)/${BUILD_DIRECTORY}"
+echo "moving to ${BUILD_DIRECTORY}"
 cd ${BUILD_DIRECTORY}
 
 # Build
 if [[ "${1}" != "--test-only" ]]
 then
     cmake \
-      -C ../.gitlab/conf/${CCONF} \
-      -C ../${CCONF} \
-      ..
+      -C ${PROJECT_DIRECTORY}/.gitlab/conf/${CCONF} \
+      -C ${PROJECT_DIRECTORY}/${CCONF} \
+      ${PROJECT_DIRECTORY}
     cmake --build . -j 4
 fi
 
@@ -49,5 +50,5 @@ then
     ctest -T test
     echo "moving to $(pwd)"
     tree Testing
-    cp Testing/*/Test.xml ../
+    cp Testing/*/Test.xml ${PROJECT_DIRECTORY}
 fi
