@@ -59,7 +59,7 @@ release_resources_build_quartz:
     - shell
     - quartz
   stage: test
-  extends: .test_quartz_script
+  extends: .test_toss_3_x86_64_ib_script
   except:
     - /_qnone/
 

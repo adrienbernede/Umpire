@@ -10,7 +10,7 @@ set -e
 
 hostname
 
-BUILD_DIRECTORY="build_${SYS_TYPE}_${COMPILER}"
+BUILD_DIRECTORY="${BUILD_ROOT}/build_${SYS_TYPE}_${COMPILER}"
 CCONF="host-configs/${SYS_TYPE}/${COMPILER}.cmake" 
 
 if [[ "${1}" != "--test-only" ]]
