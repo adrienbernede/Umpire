@@ -167,7 +167,6 @@ test_quartz_icpc_16_0_4:
   variables:
     COMPILER: "icpc_16_0_4"
   extends: .test_quartz
-  allow_failure: true
   dependencies:
     - build_quartz_icpc_16_0_4
 
@@ -191,6 +190,7 @@ test_quartz_pgi_17_10:
   extends: .test_quartz
   dependencies:
     - build_quartz_pgi_17_10
+  allow_failure: true
 
 test_quartz_pgi_18_5:
   variables:
@@ -198,3 +198,4 @@ test_quartz_pgi_18_5:
   extends: .test_quartz
   dependencies:
     - build_quartz_pgi_18_5
+  allow_failure: true
