@@ -58,7 +58,7 @@ configure_python:
     - srun $( [[ -n "${JOBID}" ]] && echo "--jobid=${JOBID}" ) -t 10 -N 1 -n 1 -c 4 scripts/gitlab/build.sh --test-only
   artifacts:
     reports:
-      junit: Test.xml 
+      junit: test.xml 
 
 # Butte uses a very different job allocation system, building on login nodes is recommended
 .build_blueos_3_ppc64le_ib_script:
