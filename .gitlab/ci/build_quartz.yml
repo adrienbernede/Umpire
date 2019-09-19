@@ -7,62 +7,51 @@
 
 ####
 # This is the share configuration of jobs for quartz
-
-####
-# In pre-build phase, allocate a node for builds
-allocate_resources_build_quartz:
-  tags:
-    - shell
-    - quartz
-  stage: allocate_resources
-  script:
-    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=${BUILD_QUARTZ_ALLOC_NAME}
-  except:
-    refs:
-      - /_qnone/
-    variables:
-      - $UMPIRE_CI_QUARTZ == "OFF"
-
-####
-# In post-build phase, deallocate resources
-# Note : make sure this is run even on build phase failure
-release_resources_build_quartz:
-  tags:
-    - shell
-    - quartz
-  stage: release_resources
-  script:
-    - export JOBID=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A)
-    - ([[ -n "${JOBID}" ]] && scancel ${JOBID})
-  when: always
-  except:
-    - /_qnone/
-
-####
-# Generic qwartz job, extending build script
-.build_quartz:
-  variables:
-  tags:
-    - shell
-    - quartz
-  stage: build
-  extends: .build_toss_3_x86_64_ib_script
-  except:
-    - /_qnone/
-
-####
-# Generic qwartz job, extending test script
-.test_quartz:
+.quartz_common:
   variables:
     CLUSTER: "toss_3_x86_64_ib"
   tags:
     - shell
     - quartz
-  stage: test
-  extends: .test_toss_3_x86_64_ib_script
-  except:
+  refs:
     - /_qnone/
+  variables:
+    - $UMPIRE_CI_QUARTZ == "OFF"
 
+####
+# In pre-build phase, allocate a node for builds
+allocate_resources_build_quartz:
+  extends: .quartz_common
+  stage: allocate_resources
+  script:
+    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=${BUILD_QUARTZ_ALLOC_NAME}
+
+####
+# In post-build phase, deallocate resources
+# Note : make sure this is run even on build phase failure
+release_resources_build_quartz:
+  extends: .quartz_common
+  stage: release_resources
+  script:
+    - export JOBID=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A)
+    - ([[ -n "${JOBID}" ]] && scancel ${JOBID})
+  when: always
+
+####
+# Generic qwartz job, extending build script
+.build_quartz:
+  extends:
+    - .quartz_common
+    - .build_toss_3_x86_64_ib_script
+  stage: build
+
+####
+# Generic qwartz job, extending test script
+.test_quartz:
+  extends:
+    - .quartz_common
+    - .test_toss_3_x86_64_ib_script
+  stage: test
 
 ####
 # Here are all quartz build jobs
