@@ -32,7 +32,7 @@ configure_python:
   stage: environment
   script:
     - virtualenv $PYTHON_ENVIRONMENT_PATH
-    - . $PYTHON_ENVIRONMENT_PATH/bin/activate
+    - . ${PYTHON_ENVIRONMENT_PATH}/bin/activate
     - pip install numpy
     - pip install nose
 
@@ -53,7 +53,6 @@ configure_python:
 # This is not a job, but contains project specific build commands
 .test_toss_3_x86_64_ib_script:
   script:
-    - . $PYTHON_ENVIRONMENT_PATH/bin/activate
     - echo ${BUILD_QUARTZ_ALLOC_NAME}
     - export JOBID=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A)
     - echo ${JOBID}
