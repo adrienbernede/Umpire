@@ -8,16 +8,13 @@
 
 set -e
 
-hostname
-
 PROJECT_DIRECTORY="$(pwd)"
 BUILD_DIRECTORY="${BUILD_ROOT}/build_${SYS_TYPE}_${COMPILER}"
 CCONF="host-configs/${SYS_TYPE}/${COMPILER}.cmake" 
 
+# If building, then delete everything first
 if [[ "${1}" != "--test-only" ]]
 then
-    # If building, then delete everything first
-
     rm -rf ${BUILD_DIRECTORY}
     mkdir -p ${BUILD_DIRECTORY}
 fi
@@ -46,12 +43,5 @@ fi
 # Test
 if [[ "${1}" != "--build-only" ]] 
 then
-    echo "moving to $(pwd)"
     ctest -T test
-    echo "moving to $(pwd)"
-    tree Testing
-    . ${PYTHON_ENVIRONMENT_PATH}/bin/activate
-    which python
-    python ${PROJECT_DIRECTORY}/scripts/gitlab/junit/ctest2junit.py ./ ${PROJECT_DIRECTORY}/scripts/gitlab/junit/ctest2junit.xsl > test.xml
-    cp test.xml ${PROJECT_DIRECTORY}
 fi

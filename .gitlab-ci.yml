@@ -56,6 +56,8 @@ configure_python:
     - export JOBID=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A)
     - echo ${JOBID}
     - srun $( [[ -n "${JOBID}" ]] && echo "--jobid=${JOBID}" ) -t 10 -N 1 -n 1 -c 4 scripts/gitlab/build.sh --test-only
+  after_script:
+    - scripts/gitlab/after_test.sh
   artifacts:
     reports:
       junit: test.xml 
