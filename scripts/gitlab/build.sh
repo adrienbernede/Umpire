@@ -50,5 +50,6 @@ then
     ctest -T test
     echo "moving to $(pwd)"
     tree Testing
-    cp Testing/*/Test.xml ${PROJECT_DIRECTORY}
+    python ${PROJECT_DIRECTORY}/scripts/gitlab/junit/ctest2junit.py ./ ${PROJECT_DIRECTORY}/scripts/gitlab/junit/ctest2junit.xsl > test.xml
+    cp test.xml ${PROJECT_DIRECTORY}
 fi
