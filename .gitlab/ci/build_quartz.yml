@@ -13,10 +13,11 @@
   tags:
     - shell
     - quartz
-  refs:
-    - /_qnone/
-  variables:
-    - $UMPIRE_CI_QUARTZ == "OFF"
+  except:
+    refs:
+      - /_qnone/
+    variables:
+      - $UMPIRE_CI_QUARTZ == "OFF"
 
 ####
 # In pre-build phase, allocate a node for builds
