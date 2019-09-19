@@ -33,8 +33,7 @@ configure_python:
   script:
     - virtualenv $PYTHON_ENVIRONMENT_PATH
     - . ${PYTHON_ENVIRONMENT_PATH}/bin/activate
-    - pip install numpy
-    - pip install nose
+    - pip install lxml
 
 # This is not a job, but contains project specific build commands
 # If an allocation exist with the name defined in this pipeline, the job will use it

@@ -51,6 +51,7 @@ then
     echo "moving to $(pwd)"
     tree Testing
     . ${PYTHON_ENVIRONMENT_PATH}/bin/activate
+    which python
     python ${PROJECT_DIRECTORY}/scripts/gitlab/junit/ctest2junit.py ./ ${PROJECT_DIRECTORY}/scripts/gitlab/junit/ctest2junit.xsl > test.xml
     cp test.xml ${PROJECT_DIRECTORY}
 fi
