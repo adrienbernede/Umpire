@@ -32,7 +32,7 @@ configure_python:
   stage: environment
   script:
     - virtualenv $PYTHON_ENVIRONMENT_PATH
-    - .$PYTHON_ENVIRONMENT_PATH/bin/activate
+    - . $PYTHON_ENVIRONMENT_PATH/bin/activate
     - pip install numpy
     - pip install nose
 
