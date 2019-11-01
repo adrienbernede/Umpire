@@ -31,11 +31,6 @@ stages:
     - export JOBID=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A)
     - echo ${JOBID}
     - srun $( [[ -n "${JOBID}" ]] && echo "--jobid=${JOBID}" ) -t 10 -N 1 -n 1 -c 4 scripts/gitlab/build.sh --build-only
-  artifacts:
-  # sending artifact to next stage job, only on success (default)
-    paths:
-      - build_*
-    expire_in: 1 hour
 
 # This is not a job, but contains project specific build commands
 .test_toss_3_x86_64_ib_script:
