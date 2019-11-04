@@ -10,13 +10,10 @@
 
 ####
 # In pre-build phase, allocate a node for builds
-allocate_resources_build_quartz:
+.quartz_common:
   tags:
     - shell
     - quartz
-  stage: allocate_resources
-  script:
-    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=${BUILD_QUARTZ_ALLOC_NAME}
   except:
     refs:
       - /_qnone/
@@ -24,12 +21,22 @@ allocate_resources_build_quartz:
       - $UMPIRE_CI_QUARTZ == "OFF"
 
 ####
+# In pre-build phase, allocate a node for builds
+allocate_resources_build_quartz:
+  variables:
+    GIT_STRATEGY: none
+  extends: .quartz_common
+  stage: allocate_resources
+  script:
+    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=${BUILD_QUARTZ_ALLOC_NAME}
+
+####
 # In post-build phase, deallocate resources
 # Note : make sure this is run even on build phase failure
 release_resources_build_quartz:
-  tags:
-    - shell
-    - quartz
+  variables:
+    GIT_STRATEGY: none
+  extends: .quartz_common
   stage: release_resources
   script:
     - export JOBID=$(squeue -h --name=${BUILD_QUARTZ_ALLOC_NAME} --format=%A)
