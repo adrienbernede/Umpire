@@ -22,6 +22,8 @@
 ####
 # In pre-build phase, allocate a node for builds
 allocate_resources_build_quartz:
+  variables:
+    GIT_STRATEGY: none
   extends: .quartz_common
   stage: allocate_resources
   script:
@@ -31,6 +33,8 @@ allocate_resources_build_quartz:
 # In post-build phase, deallocate resources
 # Note : make sure this is run even on build phase failure
 release_resources_build_quartz:
+  variables:
+    GIT_STRATEGY: none
   extends: .quartz_common
   stage: release_resources
   script:
@@ -49,6 +53,8 @@ release_resources_build_quartz:
 ####
 # Generic qwartz job, extending test script
 .test_quartz:
+  variables:
+    GIT_STRATEGY: none
   extends:
     - .quartz_common
     - .test_toss_3_x86_64_ib_script
