@@ -21,6 +21,8 @@ stages:
   - allocate_resources
   - build
   - test
+  - build_advanced
+  - test_advanced
   - release_resources
 
 # This is not a job, but contains project specific build commands
