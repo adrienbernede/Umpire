@@ -48,8 +48,7 @@ after_script:
 stages:
   - start
   - q_allocate_resources
-  - q_build
-  - q_test
+  - q_build_and_test
   - q_release_resources
   - l_build_and_test
   - b_build_and_test

@@ -31,67 +31,67 @@
 ####
 # Here are all butte build jobs
 
-build_butte_clang_3_9_1_advanced:
+B_clang_3_9_1_advanced:
   variables:
     COMPILER: "clang_3_9_1"
   extends: .build_butte_advanced
 
-build_butte_gcc_4_9_3:
+B_gcc_4_9_3:
   variables:
     COMPILER: "gcc_4_9_3"
   extends: .build_butte
 
-build_butte_clang_4_0_0:
+B_clang_4_0_0:
   variables:
     COMPILER: "clang_4_0_0"
   extends: .build_butte
 
-build_butte_clang_coral_2017_06_29_advanced:
+B_clang_coral_2017_06_29_advanced:
   variables:
     COMPILER: "clang_coral_2017_06_29"
   extends: .build_butte_advanced
 
-build_butte_clang_coral_2017_08_31_advanced:
+B_clang_coral_2017_08_31_advanced:
   variables:
     COMPILER: "clang_coral_2017_08_31"
   extends: .build_butte_advanced
 
-build_butte_clang_coral_2017_09_06_advanced:
+B_clang_coral_2017_09_06_advanced:
   variables:
     COMPILER: "clang_coral_2017_09_06"
   extends: .build_butte_advanced
 
-build_butte_clang_coral_2017_09_18:
+B_clang_coral_2017_09_18:
   variables:
     COMPILER: "clang_coral_2017_09_18"
   extends: .build_butte
 
-build_butte_nvcc_gcc_4_9_3:
+B_nvcc_gcc_4_9_3:
   variables:
     COMPILER: "nvcc_gcc_4_9_3"
   extends: .build_butte
 
-build_butte_nvcc_clang_coral_2017_06_29_advanced:
+B_nvcc_clang_coral_2017_06_29_advanced:
   variables:
     COMPILER: "nvcc_clang_coral_2017_06_29"
   extends: .build_butte_advanced
 
-build_butte_nvcc_clang_coral_2017_08_31_advanced:
+B_nvcc_clang_coral_2017_08_31_advanced:
   variables:
     COMPILER: "nvcc_clang_coral_2017_08_31"
   extends: .build_butte_advanced
 
-build_butte_nvcc_clang_coral_2017_09_06_advanced:
+B_nvcc_clang_coral_2017_09_06_advanced:
   variables:
     COMPILER: "nvcc_clang_coral_2017_09_06"
   extends: .build_butte_advanced
 
-build_butte_nvcc_clang_coral_2017_09_18:
+B_nvcc_clang_coral_2017_09_18:
   variables:
     COMPILER: "nvcc_clang_coral_2017_09_18"
   extends: .build_butte
 
-build_butte_nvcc_xl-beta-2017.09.13:
+B_nvcc_xl-beta-2017.09.13:
   variables:
     COMPILER: "nvcc_xl-beta-2017.09.13"
   extends: .build_butte
