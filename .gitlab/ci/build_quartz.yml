@@ -64,117 +64,127 @@ release_resources_build_quartz:
 
 ####
 # All Jobs
-Q_clang_3_9_1_advanced 1 2:
+clang_3_9_1_Q_advanced 1 2:
   variables:
     COMPILER: "clang_3_9_1"
   extends: .build_quartz_advanced
 
-Q_clang_3_9_1_advanced 2 2:
+clang_3_9_1_Q_advanced 2 2:
   variables:
     COMPILER: "clang_3_9_1"
   extends: .test_quartz_advanced
+  needs: ["clang_3_9_1_Q_advanced 1 2"]
 
 
-Q_clang_4_0_0 1 2:
+clang_4_0_0_Q 1 2:
   variables:
     COMPILER: "clang_4_0_0"
   extends: .build_quartz
 
-Q_clang_4_0_0 2 2:
+clang_4_0_0_Q 2 2:
   variables:
     COMPILER: "clang_4_0_0"
   extends: .test_quartz
+  needs: ["clang_4_0_0_Q 1 2"]
 
 
-Q_gcc_4_9_3_advanced 1 2:
+gcc_4_9_3_Q_advanced 1 2:
   variables:
     COMPILER: "gcc_4_9_3"
   extends: .build_quartz_advanced
 
-Q_gcc_4_9_3_advanced 2 2:
+gcc_4_9_3_Q_advanced 2 2:
   variables:
     COMPILER: "gcc_4_9_3"
   extends: .test_quartz_advanced
+  needs: ["gcc_4_9_3_Q_advanced 1 2"]
 
 
-Q_gcc_6_1_0_advanced 1 2:
+gcc_6_1_0_Q_advanced 1 2:
   variables:
     COMPILER: "gcc_6_1_0"
   extends: .build_quartz_advanced
 
-Q_gcc_6_1_0_advanced 2 2:
+gcc_6_1_0_Q_advanced 2 2:
   variables:
     COMPILER: "gcc_6_1_0"
   extends: .test_quartz_advanced
+  needs: ["gcc_6_1_0_Q_advanced 1 2"]
 
 
-Q_gcc_7_1_0 1 2:
+gcc_7_1_0_Q 1 2:
   variables:
     COMPILER: "gcc_7_1_0"
   extends: .build_quartz
 
-Q_gcc_7_1_0 2 2:
+gcc_7_1_0_Q 2 2:
   variables:
     COMPILER: "gcc_7_1_0"
   extends: .test_quartz
+  needs: ["gcc_7_1_0_Q 1 2"]
 
 
-Q_cudatoolkit_9_1 1 2:
+cudatoolkit_9_1_Q 1 2:
   variables:
     COMPILER: "cudatoolkit_9_1"
   extends: .build_quartz
 
-Q_cudatoolkit_9_1 2 2:
+cudatoolkit_9_1_Q 2 2:
   variables:
     COMPILER: "cudatoolkit_9_1"
   extends: .test_quartz
+  needs: ["cudatoolkit_9_1_Q 1 2"]
 
 
-Q_icpc_16_0_4_advanced 1 2:
+icpc_16_0_4_Q_advanced 1 2:
   variables:
     COMPILER: "icpc_16_0_4"
   extends: .build_quartz_advanced
   allow_failure: true
 
-Q_icpc_16_0_4_advanced 2 2:
+icpc_16_0_4_Q_advanced 2 2:
   variables:
     COMPILER: "icpc_16_0_4"
   extends: .test_quartz_advanced
+  needs: ["icpc_16_0_4_Q_advanced 1 2"]
   allow_failure: true
 
 
-Q_icpc_17_0_2_advanced 1 2:
+icpc_17_0_2_Q_advanced 1 2:
   variables:
     COMPILER: "icpc_17_0_2"
   extends: .build_quartz_advanced
 
-Q_icpc_17_0_2_advanced 2 2:
+icpc_17_0_2_Q_advanced 2 2:
   variables:
     COMPILER: "icpc_17_0_2"
   extends: .test_quartz_advanced
+  needs: ["icpc_17_0_2_Q_advanced 1 2"]
 
 
-Q_pgi_17_10_advanced 1 2:
+pgi_17_10_Q_advanced 1 2:
   variables:
     COMPILER: "pgi_17_10"
   extends: .build_quartz_advanced
   allow_failure: true
 
-Q_pgi_17_10_advanced 2 2:
+pgi_17_10_Q_advanced 2 2:
   variables:
     COMPILER: "pgi_17_10"
   extends: .test_quartz_advanced
+  needs: ["pgi_17_10_Q_advanced 1 2"]
   allow_failure: true
 
 
-Q_pgi_18_5 1 2:
+pgi_18_5_Q 1 2:
   variables:
     COMPILER: "pgi_18_5"
   extends: .build_quartz
   allow_failure: true
 
-Q_pgi_18_5 2 2:
+pgi_18_5_Q 2 2:
   variables:
     COMPILER: "pgi_18_5"
   extends: .test_quartz
+  needs: ["pgi_18_5_Q 1 2"]
   allow_failure: true
