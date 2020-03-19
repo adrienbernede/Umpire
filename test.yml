@@ -1,0 +1,6 @@
+test:
+  tags:
+    - shell
+    - quartz
+  script:
+    - echo "toto"
