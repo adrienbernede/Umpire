@@ -1,20 +1,21 @@
 trigger:quartz:
   trigger:
     include:
-      - local: gitlab/quartz.yml
       - local: gitlab/child-pipeline.yml
+      - local: gitlab/quartz-template.yml
+      - local: gitlab/quartz-jobs.yml
     strategy: depend
 
 trigger:lassen:
   trigger:
     include:
-      - local: gitlab/lassen.yml
       - local: gitlab/child-pipeline.yml
+      - local: gitlab/lassen.yml
     strategy: depend
 
 trigger:build:
   trigger:
     include:
-      - local: gitlab/butte.yml
       - local: gitlab/child-pipeline.yml
+      - local: gitlab/butte.yml
     strategy: depend
