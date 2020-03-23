@@ -1,6 +1,6 @@
 ##############################################################################
-# Copyright (c) 2016-19, Lawrence Livermore National Security, LLC and Umpire
-# project contributors. See the COPYRIGHT file for details.
+# Copyright (c) 2016-19, Lawrence Livermore National Security, LLC and
+# radiuss-ci project contributors. See the COPYRIGHT file for details.
 #
 # SPDX-License-Identifier: (MIT)
 ##############################################################################
@@ -13,7 +13,7 @@
     - shell
     - lassen
   rules:
-    - if: '$CI_COMMIT_BRANCH =~ /_lnone/ || $UMPIRE_CI_LASSEN == "OFF"' #run except if ...
+    - if: '$CI_COMMIT_BRANCH =~ /_lnone/ || $PROJECT_CI_LASSEN == "OFF"' #run except if ...
       when: never
     - when: on_success
 

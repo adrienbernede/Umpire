@@ -13,7 +13,7 @@ allocate_resources (on quartz):
   extends: .on_quartz
   stage: q_allocate_resources
   script:
-    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=${UMPIRE_ALLOC_NAME}
+    - salloc -N 1 -c 36 -p pdebug -t 10 --no-shell --job-name=${PROJECT_ALLOC_NAME}
   needs: ["start"]
 
 ####
@@ -25,7 +25,7 @@ release_resources (on quartz):
   extends: .on_quartz
   stage: q_release_resources
   script:
-    - export JOBID=$(squeue -h --name=${UMPIRE_ALLOC_NAME} --format=%A)
+    - export JOBID=$(squeue -h --name=${PROJECT_ALLOC_NAME} --format=%A)
     - ([[ -n "${JOBID}" ]] && scancel ${JOBID})
 
 ####
