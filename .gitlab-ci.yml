@@ -10,12 +10,14 @@ trigger:lassen:
   trigger:
     include:
       - local: gitlab/child-pipeline.yml
-      - local: gitlab/lassen.yml
+      - local: gitlab/lassen-template.yml
+      - local: gitlab/lassen-jobs.yml
     strategy: depend
 
 trigger:build:
   trigger:
     include:
       - local: gitlab/child-pipeline.yml
-      - local: gitlab/butte.yml
+      - local: gitlab/butte-template.yml
+      - local: gitlab/butte-jobs.yml
     strategy: depend
