@@ -1,3 +1,6 @@
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 stages:
   - generate
   - build
@@ -8,10 +11,12 @@ generate:quartz:
     - shell
     - quartz
   script:
-    - cp gitlab/radiuss/quartz-jobs.yml gitlab/quartz-jobs.yml
+    - .radiuss-ci/gitlab/umpire/generate.sh quartz
   artifacts:
     paths:
-      - gitlab/quartz-jobs.yml
+      - child-pipeline.yml
+      - quartz-template.yml
+      - quartz-jobs.yml
 
 generate:lassen:
   stage: generate
@@ -19,10 +24,12 @@ generate:lassen:
     - shell
     - quartz
   script:
-    - cp gitlab/radiuss/lassen-jobs.yml gitlab/lassen-jobs.yml
+    - .radiuss-ci/gitlab/umpire/generate.sh lassen
   artifacts:
     paths:
-      - gitlab/lassen-jobs.yml
+      - child-pipeline.yml
+      - lassen-template.yml
+      - lassen-jobs.yml
 
 generate:butte:
   stage: generate
@@ -30,18 +37,22 @@ generate:butte:
     - shell
     - quartz
   script:
-    - cp gitlab/radiuss/butte-jobs.yml gitlab/butte-jobs.yml
+    - .radiuss-ci/gitlab/umpire/generate.sh butte
   artifacts:
     paths:
-      - gitlab/butte-jobs.yml
+      - child-pipeline.yml
+      - butte-template.yml
+      - butte-jobs.yml
 
 trigger:quartz:
   stage: build
   trigger:
     include:
-      - local: gitlab/child-pipeline.yml
-      - local: gitlab/quartz-template.yml
-      - artifact: gitlab/quartz-jobs.yml
+      - artifact: child-pipeline.yml
+        job: generate:quartz
+      - artifact: quartz-template.yml
+        job: generate:quartz
+      - artifact: quartz-jobs.yml
         job: generate:quartz
     strategy: depend
 
@@ -49,9 +60,11 @@ trigger:lassen:
   stage: build
   trigger:
     include:
-      - local: gitlab/child-pipeline.yml
-      - local: gitlab/lassen-template.yml
-      - artifact: gitlab/lassen-jobs.yml
+      - artifact: child-pipeline.yml
+        job: generate:lassen
+      - artifact: lassen-template.yml
+        job: generate:lassen
+      - artifact: lassen-jobs.yml
         job: generate:lassen
     strategy: depend
 
@@ -59,8 +72,10 @@ trigger:butte:
   stage: build
   trigger:
     include:
-      - local: gitlab/child-pipeline.yml
-      - local: gitlab/butte-template.yml
-      - artifact: gitlab/butte-jobs.yml
+      - artifact: child-pipeline.yml
+        job: generate:butte
+      - artifact: butte-template.yml
+        job: generate:butte
+      - artifact: butte-jobs.yml
         job: generate:butte
     strategy: depend

@@ -7,4 +7,4 @@
 [submodule ".radiuss-ci"]
 	path = .radiuss-ci
 	url = https://github.com/LLNL/radiuss-ci
-	branch = feature/umpire-ci
+	branch = feature/exported-ci
