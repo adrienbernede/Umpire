@@ -3,7 +3,7 @@ variables:
 
 stages:
   - generate
-  - trigger
+  - build
 
 generate:
   stage: generate
@@ -17,9 +17,21 @@ generate:
       - radiuss-*.yml
 
 trigger:umpire-ci:
-  stage: trigger
+  stage: build
   trigger:
     include:
-      - artifact: radiuss-*.yml
+      - artifact: child-pipeline.yml
+        job: generate
+      - artifact: quartz-template.yml
+        job: generate
+      - artifact: quartz-jobs.yml
+        job: generate
+      - artifact: lassen-template.yml
+        job: generate
+      - artifact: lassen-jobs.yml
+        job: generate
+      - artifact: butte-template.yml
+        job: generate
+      - artifact: butte-jobs.yml
         job: generate
     strategy: depend
