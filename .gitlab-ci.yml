@@ -1,23 +1,66 @@
+stages:
+  - generate
+  - build
+
+generate:quartz:
+  stage: generate
+  tags:
+    - shell
+    - quartz
+  script:
+    - cp gitlab/radiuss/quartz-jobs.yml gitlab/quartz-jobs.yml
+  artifacts:
+    paths:
+      - gitlab/quartz-jobs.yml
+
+generate:lassen:
+  stage: generate
+  tags:
+    - shell
+    - quartz
+  script:
+    - cp gitlab/radiuss/lassen-jobs.yml gitlab/lassen-jobs.yml
+  artifacts:
+    paths:
+      - gitlab/lassen-jobs.yml
+
+generate:butte:
+  stage: generate
+  tags:
+    - shell
+    - quartz
+  script:
+    - cp gitlab/radiuss/butte-jobs.yml gitlab/butte-jobs.yml
+  artifacts:
+    paths:
+      - gitlab/butte-jobs.yml
+
 trigger:quartz:
+  stage: build
   trigger:
     include:
       - local: gitlab/child-pipeline.yml
       - local: gitlab/quartz-template.yml
-      - local: gitlab/quartz-jobs.yml
+      - artifact: gitlab/quartz-jobs.yml
+        job: generate:quartz
     strategy: depend
 
 trigger:lassen:
+  stage: build
   trigger:
     include:
       - local: gitlab/child-pipeline.yml
       - local: gitlab/lassen-template.yml
-      - local: gitlab/lassen-jobs.yml
+      - artifact: gitlab/lassen-jobs.yml
+        job: generate:lassen
     strategy: depend
 
-trigger:build:
+trigger:butte:
+  stage: build
   trigger:
     include:
       - local: gitlab/child-pipeline.yml
       - local: gitlab/butte-template.yml
-      - local: gitlab/butte-jobs.yml
+      - artifact: gitlab/butte-jobs.yml
+        job: generate:butte
     strategy: depend
