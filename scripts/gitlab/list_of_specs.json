@@ -41,7 +41,7 @@
       "%gcc@8.3.1",
       "%gcc@default",
       "%pgi@default",
-      "%xl@beta2019.06.20",
+      "%xl@beta2019.06.20+cuda",
       "%xl@default"
     ],
     "butte":
@@ -57,7 +57,7 @@
       "%gcc@8.3.1",
       "%gcc@default",
       "%pgi@default",
-      "%xl@beta2019.06.20",
+      "%xl@beta2019.06.20+cuda",
       "%xl@default"
     ]
   }
