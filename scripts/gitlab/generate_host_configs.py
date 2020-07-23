@@ -6,10 +6,11 @@ import subprocess
 from string import digits
 import sys
 
+from optparse import OptionParser
 
 def cmd_exe(cmd,ret_output=False,echo=False):
     """
-    Helper for executing shell commands.
+    Helper for shell commands execution.
     """
     if echo:
         print("[cmd_exe: {}]".format(cmd))
@@ -36,7 +37,7 @@ def get_machine_name():
         print("[ERROR]: '{}' call failed".format(cmd))
         sys.exit(-1)
 
-    hostname=out.strip(digits).strip()
+    hostname=out.strip().strip(digits)
 
     if not hostname:
         print("[ERROR]: hostname is empty")
@@ -58,12 +59,47 @@ def get_system_type():
     return sys_type
 
 
+def parse_args():
+    """
+    Parses args from command line
+    """
+    parser = OptionParser()
+    parser.add_option("--spec",
+                      dest="spec",
+                      default=None,
+                      help="Partial spec to match")
+
+    opts, extras = parser.parse_args()
+    opts = vars(opts)
+
+    return opts, extras
+
+
 # Main
-machine = get_machine_name()
-sys_type = get_system_type()
+def main():
+    """
+    Generate host-config files for all specs matching sys_type, machine and 
+    partial_spec. Specs for each (sys_type,machine) are provided in a json 
+    formated file.
+    """
 
-with open('scripts/gitlab/list_of_specs.json') as f:
-    specs_data = json.load(f)
+    opts, extra_opts = parse_args()
+    
+    partial_spec = opts["spec"]
+    machine = get_machine_name()
+    sys_type = get_system_type()
+    
+    with open('scripts/gitlab/list_of_specs.json') as f:
+        specs_data = json.load(f)
+    
+        # Exclude spec not matching partial_spec if defined
+        for spec in specs_data[sys_type][machine]:
+            if partial_spec and not partial_spec in spec:
+                print("[INFO]: spec {0} ignored".format(spec))
+            else:
+                print("[INFO]: generate host-config for spec {0}".format(spec))
+                cmd = "python scripts/uberenv/uberenv.py --spec={0}".format(spec)
+                cmd_exe(cmd, echo=True)
 
-    print(specs_data[sys_type][machine])
-
+if __name__ == "__main__":
+    sys.exit(main())
