@@ -87,7 +87,7 @@ nvcc_clang_coral_2018_08_08 (build and test on lassen):
     HOST_CONFIG: "lassen-blueos_3_ppc64le_ib_p9-clang@coral2018.08.08-cuda-utanamnspv6tabbpgu6rkp56p3ka276d.cmake"
   extends: .build_and_test_on_lassen
 
-xl-beta-2019.06.20 (build and test on lassen):
+nvcc_xl-beta-2019.06.20 (build and test on lassen):
   variables:
-    HOST_CONFIG: "lassen-blueos_3_ppc64le_ib_p9-xl@beta2019.06.20-s2ja6weqh6vhw5m6he476ncsmwrphi5p.cmake"
+    HOST_CONFIG: "lassen-blueos_3_ppc64le_ib_p9-xl@beta2019.06.20-cuda-7ymlfxgrfplb5tztddd6ta46zc2iypwg.cmake"
   extends: .build_and_test_on_lassen
