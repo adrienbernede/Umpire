@@ -34,7 +34,7 @@ then
 
     prefix_opt=""
 
-    if -d /dev/shm
+    if [[ -d /dev/shm ]]
     then
         prefix="/dev/shm/${hostname}/${spec}"
         mkdir -p ${prefix}
