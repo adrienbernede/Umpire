@@ -195,6 +195,13 @@ def parse_args():
                            " but can cause issues with macOS versions >= 10.13. "
                            " so it is disabled by default.")
 
+    # option to stop after spack download and setup
+    parser.add_option("--setup-only",
+                      action="store_true",
+                      dest="setup_only",
+                      default=False,
+                      help="Only download and setup Spack. No further Spack command will be run.")
+
 
     ###############
     # parse args
@@ -220,7 +227,11 @@ def parse_args():
 
 def uberenv_script_dir():
     # returns the directory of the uberenv.py script
-    return os.path.dirname(os.path.abspath(__file__))
+    return os.path.dirname(os.path.realpath(__file__))
+
+def uberenv_config_dir(project_json_file):
+    # returns the directory of the uberenv.py script
+    return os.path.dirname(os.path.realpath(project_json_file))
 
 def load_json_file(json_file):
     # reads json file
@@ -231,6 +242,27 @@ def is_darwin():
 
 def is_windows():
     return "windows" in platform.system().lower()
+
+def find_project_config(opts):
+    project_json_file = opts["project_json"]
+    lookup_path = os.path.abspath(os.path.join(uberenv_script_dir(), os.pardir))
+    # Default case: project.json seats next to uberenv.py or is given on command line.
+    if os.path.isfile(project_json_file):
+        return project_json_file
+    # Submodule case: .uberenv.json is in one of the parent dir
+    else:
+        end_of_search = False
+        while not end_of_search:
+            if os.path.dirname(lookup_path) == lookup_path:
+                end_of_search = True
+            project_json_file = pjoin(lookup_path,".uberenv","config.json")
+            if os.path.isfile(project_json_file):
+                return project_json_file
+            else:
+                lookup_path = os.path.abspath(os.path.join(lookup_path, os.pardir))
+    print("ERROR: No configuration json file found")
+    sys.exit(-1)
+
 
 class UberEnv():
     """ Base class for package manager """
@@ -245,7 +277,8 @@ class UberEnv():
         print("[uberenv options: {}]".format(str(self.opts)))
 
     def setup_paths_and_dirs(self):
-        self.uberenv_path = os.path.dirname(os.path.realpath(__file__))
+        self.uberenv_path = uberenv_script_dir()
+        self.uberenv_conf_path = uberenv_config_dir(self.opts["project_json"])
 
     def set_from_args_or_json(self,setting):
         try:
@@ -319,7 +352,7 @@ class SpackEnv(UberEnv):
 
         UberEnv.setup_paths_and_dirs(self)
 
-        self.pkgs = pjoin(self.uberenv_path, "packages","*")
+        self.pkgs = pjoin(self.uberenv_conf_path, "packages","*")
 
         # setup destination paths
         self.dest_dir = os.path.abspath(self.opts["prefix"])
@@ -406,7 +439,7 @@ class SpackEnv(UberEnv):
         if spack_config_dir is None:
             uberenv_plat = self.detect_platform()
             if not uberenv_plat is None:
-                spack_config_dir = os.path.abspath(pjoin(self.uberenv_path,"spack_configs",uberenv_plat))
+                spack_config_dir = os.path.abspath(pjoin(self.uberenv_conf_path,"spack_configs",uberenv_plat))
         return spack_config_dir
 
 
@@ -434,7 +467,7 @@ class SpackEnv(UberEnv):
         spack_etc_defaults_dir = pjoin(spack_dir,"etc","spack","defaults")
 
         # copy in "defaults" config.yaml
-        config_yaml = os.path.abspath(pjoin(self.uberenv_path,"spack_configs","config.yaml"))
+        config_yaml = os.path.abspath(pjoin(self.uberenv_conf_path,"spack_configs","config.yaml"))
         sexe("cp {} {}/".format(config_yaml, spack_etc_defaults_dir ), echo=True)
 
         # copy in other settings per platform
@@ -750,6 +783,9 @@ def main():
     # parse args from command line
     opts, extra_opts = parse_args()
 
+    # project options
+    opts["project_json"] = find_project_config(opts)
+
     # Initialize the environment
     env = SpackEnv(opts, extra_opts)
 
@@ -766,6 +802,10 @@ def main():
 
     # Clean the build
     env.clean_build()
+
+    # Allow to end uberenv after spack is ready
+    if opts["setup_only"]:
+        return 0
 
     # Show the spec for what will be built
     env.show_info()
