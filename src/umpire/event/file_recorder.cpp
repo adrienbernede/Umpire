@@ -6,6 +6,7 @@
 //////////////////////////////////////////////////////////////////////////////
 
 #include "umpire/event/file_recorder.hpp"
+#include "umpire/event/event.hpp"
 
 #include "umpire/tpl/json/json.hpp"
 

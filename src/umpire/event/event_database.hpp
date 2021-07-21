@@ -4,23 +4,20 @@
 //
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
-#ifndef UMPIRE_recorder_factory_HPP
-#define UMPIRE_recorder_factory_HPP
-
-#include "umpire/event/file_recorder.hpp"
-#include "umpire/event/database_recorder.hpp"
-
-using recorder_type = umpire::event::database_recorder;
+#ifndef UMPIRE_event_database_HPP
+#define UMPIRE_event_database_HPP
 
 namespace umpire {
 namespace event {
 
-class recorder_factory {
-public:
-static recorder_type& get_recorder();
+class event;
+
+class event_database {
+  public:
+  virtual void insert(event e) = 0;
 };
 
 }
 }
 
-#endif
+#endif // UMPIRE_event_database_HPP

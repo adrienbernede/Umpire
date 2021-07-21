@@ -19,6 +19,16 @@ std::ostream& error();
 
 namespace util {
 
+std::string make_unique_filename(const std::string& base_dir, const std::string& name, const int pid,
+                                 const std::string& extension);
+
+inline bool file_exists(const std::string& file);
+
+inline bool directory_exists(const std::string& file);
+
+const std::string& get_io_output_dir();
+const std::string& get_io_output_basename();
+
 /*!
  * \brief Initialize the streams. This method is called when ResourceManger is
  * initialized. Do not call this manually.

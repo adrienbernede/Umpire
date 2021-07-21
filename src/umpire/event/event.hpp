@@ -7,8 +7,11 @@
 #ifndef UMPIRE_event_HPP
 #define UMPIRE_event_HPP
 
+#include "umpire/event/recorder_factory.hpp"
+
 #include <sstream>
 #include <string>
+#include <type_traits>
 #include <vector>
 
 
@@ -79,8 +82,8 @@ public:
     return *this;
   }
 
-  template<typename Recorder>
-  void record(Recorder&& r)
+  template<typename Recorder = decltype(recorder_factory::get_recorder())>
+  void record(Recorder r = recorder_factory::get_recorder())
   {
     r.record(m_event);
   }

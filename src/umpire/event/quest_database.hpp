@@ -4,27 +4,31 @@
 //
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
-#ifndef UMPIRE_file_recorder_HPP
-#define UMPIRE_file_recorder_HPP
+#ifndef UMPIRE_quest_database_HPP
+#define UMPIRE_quest_database_HPP
 
-#include <fstream>
+#include "umpire/event/event_database.hpp"
+
+#include <string>
 
 namespace umpire {
 namespace event {
 
 class event;
 
-class file_recorder {
+class quest_database : public event_database{
   public:
-  
-  file_recorder(const std::string& filename);
+  quest_database(const std::string& url, int port, const std::string& name);
 
-  void record(event e);
+  void insert(event e) override final;
 
   private:
-  std::ofstream m_fstream;
+  const std::string m_url;
+  const int m_port;
+  const std::string m_name;
 };
 
 }
 }
-#endif // UMPIRE_file_recorder_HPP
+
+#endif // UMPIRE_quest_database_HPP

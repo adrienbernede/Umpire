@@ -7,10 +7,17 @@
 
 set (umpire_event_headers
   event.hpp
+  event_database.hpp
+  quest_database.hpp
+  database_recorder.hpp
+  influxdb.hpp
   file_recorder.hpp
-  recorder_factory.hpp)
+  recorder_factory.hpp
+  )
 
 set (umpire_event_sources
+  database_recorder.cpp
+  quest_database.cpp
   file_recorder.cpp
   recorder_factory.cpp)
 
@@ -40,3 +47,5 @@ install(TARGETS
 install(FILES
   ${umpire_event_headers}
   DESTINATION include/umpire/event)
+
+umpire_add_code_checks(PREFIX event)

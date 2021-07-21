@@ -57,13 +57,6 @@ std::ostream& error()
 
 namespace util {
 
-static std::string make_unique_filename(const std::string& base_dir, const std::string& name, const int pid,
-                                        const std::string& extension);
-
-static inline bool file_exists(const std::string& file);
-
-static inline bool directory_exists(const std::string& file);
-
 void initialize_io(const bool enable_log, const bool enable_replay)
 {
   static util::OutputBuffer s_log_buffer;
@@ -78,15 +71,8 @@ void initialize_io(const bool enable_log, const bool enable_replay)
   replay().rdbuf(&s_replay_buffer);
   error().rdbuf(&s_error_buffer);
 
-  std::string root_io_dir{"./"};
-  const char* output_dir{std::getenv("UMPIRE_OUTPUT_DIR")};
-  if (output_dir)
-    root_io_dir = output_dir;
-
-  std::string file_basename{"umpire"};
-  const char* base_name{std::getenv("UMPIRE_OUTPUT_BASENAME")};
-  if (base_name)
-    file_basename = base_name;
+  const std::string& root_io_dir{get_io_output_dir()};
+  const std::string& file_basename{get_io_output_basename()};
 
   const int pid{getpid()};
 
@@ -162,8 +148,8 @@ void flush_files()
   error().flush();
 }
 
-static std::string make_unique_filename(const std::string& base_dir, const std::string& name, const int pid,
-                                        const std::string& extension)
+std::string make_unique_filename(const std::string& base_dir, const std::string& name, const int pid,
+                                 const std::string& extension)
 {
   int unique_id{0};
   std::string filename;
@@ -175,13 +161,13 @@ static std::string make_unique_filename(const std::string& base_dir, const std::
   return filename;
 }
 
-static inline bool file_exists(const std::string& path)
+inline bool file_exists(const std::string& path)
 {
   std::ifstream ifile(path.c_str());
   return ifile.good();
 }
 
-static inline bool directory_exists(const std::string& path)
+inline bool directory_exists(const std::string& path)
 {
 #if defined(UMPIRE_ENABLE_FILESYSTEM)
   std::filesystem::path fspath_path(path);
@@ -194,6 +180,22 @@ static inline bool directory_exists(const std::string& path)
     return S_ISDIR(info.st_mode);
   }
 #endif
+}
+
+const std::string& get_io_output_dir()
+{
+  static const char* output_dir_env{std::getenv("UMPIRE_OUTPUT_DIR")};
+  static const std::string output_dir = output_dir_env ? output_dir_env : "./";
+
+  return output_dir;
+}
+
+const std::string& get_io_output_basename()
+{
+  static const char* base_name_env{std::getenv("UMPIRE_OUTPUT_BASENAME")};
+  static std::string base_name = base_name_env ? base_name_env : "umpire";
+
+  return base_name;
 }
 
 } // end namespace util
