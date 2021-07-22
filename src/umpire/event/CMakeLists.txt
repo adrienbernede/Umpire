@@ -10,7 +10,6 @@ set (umpire_event_headers
   event_database.hpp
   quest_database.hpp
   database_recorder.hpp
-  influxdb.hpp
   file_recorder.hpp
   recorder_factory.hpp
   )

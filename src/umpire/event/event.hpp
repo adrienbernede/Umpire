@@ -31,7 +31,7 @@ public:
 
   std::string m_name{"anon"};
   category m_category{category::statistic};
-  std::vector<std::string> m_tags{};
+  std::vector<std::pair<std::string, std::string>> m_tags{};
   std::vector<std::pair<std::string, int>> m_int_args{};
   std::vector<std::pair<std::string, std::string>> m_string_args{};
   const std::chrono::time_point<std::chrono::system_clock> m_timestamp{};
@@ -77,8 +77,10 @@ public:
     return *this;
   }
 
-  builder& tag(const std::string& t) {
-    m_event.m_tags.push_back(t);
+  builder& tag(const std::string& t, const std::string& v) {
+    m_event.m_tags.push_back(
+      std::make_pair(t, v)
+    );
     return *this;
   }
 

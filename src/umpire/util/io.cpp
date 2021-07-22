@@ -71,8 +71,8 @@ void initialize_io(const bool enable_log, const bool enable_replay)
   replay().rdbuf(&s_replay_buffer);
   error().rdbuf(&s_error_buffer);
 
-  const std::string& root_io_dir{get_io_output_dir()};
-  const std::string& file_basename{get_io_output_basename()};
+  const std::string& root_io_dir{util::get_io_output_dir()};
+  const std::string& file_basename{util::get_io_output_basename()};
 
   const int pid{getpid()};
 
@@ -161,13 +161,13 @@ std::string make_unique_filename(const std::string& base_dir, const std::string&
   return filename;
 }
 
-inline bool file_exists(const std::string& path)
+bool file_exists(const std::string& path)
 {
   std::ifstream ifile(path.c_str());
   return ifile.good();
 }
 
-inline bool directory_exists(const std::string& path)
+bool directory_exists(const std::string& path)
 {
 #if defined(UMPIRE_ENABLE_FILESYSTEM)
   std::filesystem::path fspath_path(path);

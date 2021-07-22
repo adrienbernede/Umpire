@@ -38,8 +38,11 @@ file_recorder::record(event e) {
     je["args"][name] = value;
   }
 
-  for (const auto& tag : e.m_tags) {
-    je["tags"] += tag;
+  for (const auto& it : e.m_tags) {
+    std::string tag;
+    std::string value;
+    std::tie(tag, value) = it;
+    je["tags"][tag] = value;
   }
 
   je["timestamp"] = std::to_string(static_cast<long>(std::chrono::time_point_cast<std::chrono::nanoseconds>(e.m_timestamp).time_since_epoch().count()));

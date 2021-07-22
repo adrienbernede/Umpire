@@ -29,7 +29,7 @@ recorder_factory::get_recorder()
   //util::get_io_output_basename(), getpid(), "stats")};
   //static file_recorder recorder{filename};
 
-  static quest_database db{"127.0.0.1", 9009, "db"};
+  static quest_database db{"localhost", "9009", "db"};
   static database_recorder recorder(&db);
 
   return recorder;

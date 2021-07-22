@@ -4,8 +4,8 @@
 //
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
-#ifndef UMPIRE_IOManager_HPP
-#define UMPIRE_IOManager_HPP
+#ifndef UMPIRE_io_HPP
+#define UMPIRE_io_HPP
 
 #include <ostream>
 #include <string>
@@ -22,9 +22,9 @@ namespace util {
 std::string make_unique_filename(const std::string& base_dir, const std::string& name, const int pid,
                                  const std::string& extension);
 
-inline bool file_exists(const std::string& file);
+bool file_exists(const std::string& file);
 
-inline bool directory_exists(const std::string& file);
+bool directory_exists(const std::string& file);
 
 const std::string& get_io_output_dir();
 const std::string& get_io_output_basename();
