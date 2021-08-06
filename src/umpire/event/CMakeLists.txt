@@ -12,15 +12,17 @@ set (umpire_event_headers
   database_recorder.hpp
   file_recorder.hpp
   recorder_factory.hpp
+  sqlite_database.hpp
   )
 
 set (umpire_event_sources
   database_recorder.cpp
   quest_database.cpp
   file_recorder.cpp
-  recorder_factory.cpp)
+  recorder_factory.cpp
+  sqlite_database.cpp)
 
-set (umpire_event_depends umpire_tpl_json)
+set (umpire_event_depends umpire_tpl_json sqlite3)
 
 blt_add_library(
   NAME umpire_event

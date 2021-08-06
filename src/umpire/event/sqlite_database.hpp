@@ -4,24 +4,30 @@
 //
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
-#ifndef UMPIRE_event_database_HPP
-#define UMPIRE_event_database_HPP
+#ifndef UMPIRE_sqlite_database_HPP
+#define UMPIRE_sqlite_database_HPP
 
-#include <vector>
+#include "umpire/event/event_database.hpp"
+
+#include <string>
+#include <sqlite3.h>
 
 namespace umpire {
 namespace event {
 
 class event;
 
-class event_database {
+class sqlite_database : public event_database {
   public:
-  virtual void insert(event e) = 0;
+  sqlite_database(const std::string& name);
+  void insert(event e) override final;
+  std::vector<event> get_events() override final;
 
-  virtual std::vector<event> get_events() = 0;
+  private:
+  sqlite3* m_database;
 };
 
 }
 }
 
-#endif // UMPIRE_event_database_HPP
+#endif // UMPIRE_sqlite_database_HPP

@@ -9,6 +9,7 @@
 #include "umpire/util/io.hpp"
 
 #include "umpire/event/quest_database.hpp"
+#include "umpire/event/sqlite_database.hpp"
 
 #if !defined(_MSC_VER)
 #include <unistd.h> // getpid()
@@ -29,7 +30,9 @@ recorder_factory::get_recorder()
   //util::get_io_output_basename(), getpid(), "stats")};
   //static file_recorder recorder{filename};
 
-  static quest_database db{"localhost", "9009", "db"};
+  //static quest_database db{"localhost", "9009", "db"};
+  //static binary_file_database db{"test.bin"};
+  static sqlite_database db{"test.db"};
   static database_recorder recorder(&db);
 
   return recorder;

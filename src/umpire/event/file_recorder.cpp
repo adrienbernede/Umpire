@@ -7,6 +7,7 @@
 
 #include "umpire/event/file_recorder.hpp"
 #include "umpire/event/event.hpp"
+#include "umpire/event/event_json.hpp"
 
 #include "umpire/tpl/json/json.hpp"
 
@@ -19,35 +20,8 @@ file_recorder::file_recorder(const std::string& filename) :
 
 void 
 file_recorder::record(event e) {
-  nlohmann::json je;
-
-  je["name"] = e.m_name;
-  // TODO: only handles the two event types
-  je["category"] = (e.m_category == category::operation ) ? "operation" : "statistic";
-  for (const auto& it : e.m_int_args ) {
-    std::string name;
-    int value;
-    std::tie(name, value) = it;
-    je["args"][name] = value;
-  }
-
-  for (const auto& it : e.m_string_args ) {
-    std::string name;
-    std::string value;
-    std::tie(name, value) = it;
-    je["args"][name] = value;
-  }
-
-  for (const auto& it : e.m_tags) {
-    std::string tag;
-    std::string value;
-    std::tie(tag, value) = it;
-    je["tags"][tag] = value;
-  }
-
-  je["timestamp"] = std::to_string(static_cast<long>(std::chrono::time_point_cast<std::chrono::nanoseconds>(e.m_timestamp).time_since_epoch().count()));
-
-  m_fstream << je << std::endl;
+  nlohmann::json json_event = e;
+  m_fstream << json_event << std::endl;
 }
 
 }

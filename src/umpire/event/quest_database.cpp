@@ -35,16 +35,16 @@ quest_database::insert(event e)
 {
   std::stringstream data;
 
-  data << e.m_name;
+  data << e.name;
 
-  for (const auto& it : e.m_string_args ) {
+  for (const auto& it : e.string_args ) {
     std::string name;
     std::string value;
     std::tie(name, value) = it;
     data << "," << name << "=" << value;
   }  
 
-  for (const auto& it : e.m_tags ) {
+  for (const auto& it : e.tags ) {
     std::string name;
     std::string value;
     std::tie(name, value) = it;
@@ -53,8 +53,8 @@ quest_database::insert(event e)
 
   data << " ";
 
-  const std::string sep = (e.m_int_args.size()) > 1 ? "," : "";
-  for (const auto& it : e.m_int_args ) {
+  const std::string sep = (e.int_args.size()) > 1 ? "," : "";
+  for (const auto& it : e.int_args ) {
     std::string name;
     int value;
     std::tie(name, value) = it;
@@ -62,7 +62,7 @@ quest_database::insert(event e)
   }
 
   data << " " << std::to_string(static_cast<long>(
-      std::chrono::time_point_cast<std::chrono::nanoseconds>(e.m_timestamp).time_since_epoch().count()));
+      std::chrono::time_point_cast<std::chrono::nanoseconds>(e.timestamp).time_since_epoch().count()));
   data << "\n";
   const std::string packet_string = data.str();
   const char* packet = packet_string.c_str();
@@ -74,6 +74,12 @@ quest_database::insert(event e)
   std::cout << "bytes sent: " << bytes_sent << std::endl;
 }
 
+std::vector<event> 
+quest_database::get_events()
+{
+  std::vector<event> events;
+  return events;
+}
 
 }
 }

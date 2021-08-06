@@ -26,6 +26,8 @@ class quest_database : public event_database{
 
   void insert(event e) override final;
 
+  std::vector<event> get_events() override final;
+
   private:
   const std::string m_url;
   const std::string m_port;
