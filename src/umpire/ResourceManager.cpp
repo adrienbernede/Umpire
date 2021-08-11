@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2016-20, Lawrence Livermore National Security, LLC and Umpire
+// Copyright (c) 2016-21, Lawrence Livermore National Security, LLC and Umpire
 // project contributors. See the COPYRIGHT file for details.
 //
 // SPDX-License-Identifier: (MIT)
@@ -386,8 +386,9 @@ void ResourceManager::copy(void* dst_ptr, void* src_ptr, std::size_t size)
   op->transform(src_ptr, &dst_ptr, src_alloc_record, dst_alloc_record, size);
 }
 
-camp::resources::Event ResourceManager::copy(void* dst_ptr, void* src_ptr, camp::resources::Resource& ctx,
-                                             std::size_t size)
+camp::resources::EventProxy<camp::resources::Resource> ResourceManager::copy(void* dst_ptr, void* src_ptr,
+                                                                             camp::resources::Resource& ctx,
+                                                                             std::size_t size)
 {
   UMPIRE_LOG(Debug, "(src_ptr=" << src_ptr << ", dst_ptr=" << dst_ptr << ", size=" << size << ")");
 
@@ -444,7 +445,9 @@ void ResourceManager::memset(void* ptr, int value, std::size_t length)
   op->apply(ptr, alloc_record, value, length);
 }
 
-camp::resources::Event ResourceManager::memset(void* ptr, int value, camp::resources::Resource& ctx, std::size_t length)
+camp::resources::EventProxy<camp::resources::Resource> ResourceManager::memset(void* ptr, int value,
+                                                                               camp::resources::Resource& ctx,
+                                                                               std::size_t length)
 {
   UMPIRE_LOG(Debug, "(ptr=" << ptr << ", value=" << value << ", length=" << length << ")");
 

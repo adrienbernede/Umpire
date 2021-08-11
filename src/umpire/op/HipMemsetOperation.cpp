@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2016-20, Lawrence Livermore National Security, LLC and Umpire
+// Copyright (c) 2016-21, Lawrence Livermore National Security, LLC and Umpire
 // project contributors. See the COPYRIGHT file for details.
 //
 // SPDX-License-Identifier: (MIT)
@@ -24,9 +24,9 @@ void HipMemsetOperation::apply(void* src_ptr, util::AllocationRecord* UMPIRE_UNU
   }
 }
 
-camp::resources::Event HipMemsetOperation::apply_async(void* src_ptr,
-                                                       util::AllocationRecord* UMPIRE_UNUSED_ARG(allocation), int value,
-                                                       std::size_t length, camp::resources::Resource& ctx)
+camp::resources::EventProxy<camp::resources::Resource> HipMemsetOperation::apply_async(
+    void* src_ptr, util::AllocationRecord* UMPIRE_UNUSED_ARG(allocation), int value, std::size_t length,
+    camp::resources::Resource& ctx)
 {
   auto device = ctx.get<camp::resources::Hip>();
   auto stream = device.get_stream();
@@ -38,7 +38,7 @@ camp::resources::Event HipMemsetOperation::apply_async(void* src_ptr,
                                          << ") failed with error: " << hipGetErrorString(error));
   }
 
-  return ctx.get_event();
+  return camp::resources::EventProxy<camp::resources::Resource>{ctx};
 }
 
 } // end of namespace op
