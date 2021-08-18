@@ -94,6 +94,10 @@ public:
     return arg(k, std::string{v});
   }
 
+  builder& arg(const std::string& k, char* v) {
+    return arg(k, std::string{v});
+  }
+
   template<typename T>
   builder& arg(const std::string& k, T v) {
     using std::to_string;

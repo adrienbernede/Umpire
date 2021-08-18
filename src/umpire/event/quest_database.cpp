@@ -8,6 +8,7 @@
 #include "umpire/event/quest_database.hpp"
 #include "umpire/event/event.hpp"
 
+#include <cstring>
 #include <iostream>
 
 namespace umpire {
