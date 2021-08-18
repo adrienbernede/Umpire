@@ -7,18 +7,18 @@
 
 set (umpire_event_headers
   event.hpp
-  event_database.hpp
+  event_store.hpp
   quest_database.hpp
-  database_recorder.hpp
-  file_recorder.hpp
+  event_store_recorder.hpp
+  json_file_store.hpp
   recorder_factory.hpp
   sqlite_database.hpp
   )
 
 set (umpire_event_sources
-  database_recorder.cpp
+  event_store_recorder.cpp
   quest_database.cpp
-  file_recorder.cpp
+  json_file_store.cpp
   recorder_factory.cpp
   sqlite_database.cpp)
 

@@ -139,7 +139,7 @@ public:
   void record(Recorder r = recorder_factory::get_recorder())
   {
     if (event_enabled)
-      r.record(e);
+      r.insert(e);
   }
 
 private:

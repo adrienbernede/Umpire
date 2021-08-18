@@ -7,7 +7,7 @@
 #ifndef UMPIRE_quest_database_HPP
 #define UMPIRE_quest_database_HPP
 
-#include "umpire/event/event_database.hpp"
+#include "umpire/event/event_store.hpp"
 
 #include <string>
 
@@ -20,7 +20,7 @@ namespace event {
 
 class event;
 
-class quest_database : public event_database{
+class quest_database : public event_store{
   public:
   quest_database(const std::string& url, const std::string& port, const std::string& name);
 

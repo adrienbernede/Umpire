@@ -4,23 +4,32 @@
 //
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
-#ifndef UMPIRE_recorder_factory_HPP
-#define UMPIRE_recorder_factory_HPP
 
 #include "umpire/event/json_file_store.hpp"
-#include "umpire/event/event_store_recorder.hpp"
+#include "umpire/event/event_json.hpp"
+
+#include "umpire/tpl/json/json.hpp"
+
+#include <vector>
 
 namespace umpire {
 namespace event {
 
-using store_type = json_file_store;
+json_file_store::json_file_store(const std::string& filename) :
+  m_fstream{filename}
+{}
 
-class recorder_factory {
-public:
-static store_type& get_recorder();
-};
+void 
+json_file_store::insert(event e) {
+  nlohmann::json json_event = e;
+  m_fstream << json_event << std::endl;
+}
+
+std::vector<event>
+json_file_store::get_events() {
+  std::vector<event> events;
+  return events;
+}
 
 }
 }
-
-#endif

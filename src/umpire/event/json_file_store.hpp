@@ -4,9 +4,12 @@
 //
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
-#ifndef UMPIRE_file_recorder_HPP
-#define UMPIRE_file_recorder_HPP
+#ifndef UMPIRE_json_file_store_HPP
+#define UMPIRE_json_file_store_HPP
 
+#include "umpire/event/event_store.hpp"
+
+#include <vector>
 #include <fstream>
 
 namespace umpire {
@@ -14,12 +17,14 @@ namespace event {
 
 class event;
 
-class file_recorder {
+class json_file_store : event_store {
   public:
   
-  file_recorder(const std::string& filename);
+  json_file_store(const std::string& filename);
 
-  void record(event e);
+  virtual void insert(event e);
+
+  virtual std::vector<event> get_events();
 
   private:
   std::ofstream m_fstream;
@@ -27,4 +32,4 @@ class file_recorder {
 
 }
 }
-#endif // UMPIRE_file_recorder_HPP
+#endif // UMPIRE_json_file_store_HPP

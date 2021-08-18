@@ -23,17 +23,17 @@
 namespace umpire {
 namespace event {
 
-recorder_type&
+store_type&
 recorder_factory::get_recorder()
 {
   static const std::string filename{util::make_unique_filename(util::get_io_output_dir(),
   util::get_io_output_basename(), getpid(), "stats")};
-  static file_recorder recorder{filename};
+  static json_file_store recorder{filename};
 
   //static quest_database db{"localhost", "9009", "db"};
   //static binary_file_database db{"test.bin"};
   // static sqlite_database db{"test.db"};
-  // static database_recorder recorder(&db);
+  // static event_store_recorder recorder(&db);
 
   return recorder;
 }

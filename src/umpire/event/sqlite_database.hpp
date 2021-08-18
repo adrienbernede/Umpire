@@ -7,7 +7,7 @@
 #ifndef UMPIRE_sqlite_database_HPP
 #define UMPIRE_sqlite_database_HPP
 
-#include "umpire/event/event_database.hpp"
+#include "umpire/event/event_store.hpp"
 
 #include <string>
 #include <sqlite3.h>
@@ -17,7 +17,7 @@ namespace event {
 
 class event;
 
-class sqlite_database : public event_database {
+class sqlite_database : public event_store {
   public:
   sqlite_database(const std::string& name);
   void insert(event e) override final;

@@ -5,23 +5,21 @@
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
 
-#include "umpire/event/file_recorder.hpp"
+#include "umpire/event/event_store_recorder.hpp"
 #include "umpire/event/event.hpp"
-#include "umpire/event/event_json.hpp"
-
-#include "umpire/tpl/json/json.hpp"
 
 namespace umpire {
 namespace event {
 
-file_recorder::file_recorder(const std::string& filename) :
-  m_fstream{filename}
-{}
+event_store_recorder::event_store_recorder(event_store* db) :
+  m_database(db)
+{
+}
 
-void 
-file_recorder::record(event e) {
-  nlohmann::json json_event = e;
-  m_fstream << json_event << std::endl;
+void
+event_store_recorder::record(event e)
+{
+  m_database->insert(e);
 }
 
 }

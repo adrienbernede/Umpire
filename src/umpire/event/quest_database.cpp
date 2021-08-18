@@ -15,7 +15,7 @@ namespace umpire {
 namespace event {
 
 quest_database::quest_database(const std::string& url, const std::string& port, const std::string& name) :
-  event_database(),
+  event_store(),
   m_url(url),
   m_port(port),
   m_name(name),

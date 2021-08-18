@@ -4,26 +4,24 @@
 //
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
-#ifndef UMPIRE_quest_db_recorder_HPP
-#define UMPIRE_quest_db_recorder_HPP
+#ifndef UMPIRE_event_store_HPP
+#define UMPIRE_event_store_HPP
 
-#include "umpire/event/event_database.hpp"
+#include <vector>
 
 namespace umpire {
 namespace event {
 
 class event;
 
-class database_recorder {
+class event_store {
   public:
-  database_recorder(event_database* db);
+  virtual void insert(event e) = 0;
 
-  void record(event e);
-
-  private:
-   event_database* m_database;
+  virtual std::vector<event> get_events() = 0;
 };
 
 }
 }
-#endif // UMPIRE_quest_db_recorder_HPP
+
+#endif // UMPIRE_event_store_HPP
