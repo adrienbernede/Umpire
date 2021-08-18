@@ -16,9 +16,10 @@ namespace event {
 NLOHMANN_JSON_SERIALIZE_ENUM( category, {
     {category::operation, "operation"},
     {category::statistic, "statistic"},
+    {category::metadata, "metadata" },
 })
 
-void to_json(nlohmann::json& j, const event& e) {
+inline void to_json(nlohmann::json& j, const event& e) {
   j = nlohmann::json{
     { "name", e.name },
     { "category", e.cat },
@@ -29,7 +30,7 @@ void to_json(nlohmann::json& j, const event& e) {
   };
 }
 
-void from_json(const nlohmann::json& j, event& e) {
+inline void from_json(const nlohmann::json& j, event& e) {
   j.at("name").get_to(e.name);
   j.at("category").get_to(e.cat);
   if (j.find("int_args") != j.end()) {

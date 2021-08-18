@@ -34,7 +34,6 @@ inline void* Allocator::allocate(std::size_t bytes)
     registerAllocation(ret, bytes, m_allocator);
   }
 
-<<<<<<< HEAD
   umpire::event::event::builder()
       .name("allocate")
       .category(event::category::operation)
@@ -45,10 +44,6 @@ inline void* Allocator::allocate(std::size_t bytes)
       .tag("replay", "true")
       .record();
 
-=======
-  UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
-                << m_allocator << "\", \"size\": " << bytes << " }, \"result\": { \"memory_ptr\": \"" << ret << "\" }");
->>>>>>> develop
   return ret;
 }
 
@@ -70,8 +65,6 @@ inline void* Allocator::allocate(const std::string& name, std::size_t bytes)
     registerAllocation(ret, bytes, m_allocator, name);
   }
 
-<<<<<<< HEAD
-#if defined(UMPIRE_ENABLE_EVENTS)
   umpire::event::event::builder()
       .name("allocate")
       .category(event::category::operation)
@@ -82,13 +75,7 @@ inline void* Allocator::allocate(const std::string& name, std::size_t bytes)
       .tag("allocator_name", m_allocator->getName())
       .tag("replay", "true")
       .record();
-#endif
 
-=======
-  UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
-                << m_allocator << "\", \"size\": " << bytes << ", \"name\": \"" << name << "\""
-                << " }, \"result\": { \"memory_ptr\": \"" << ret << "\" }");
->>>>>>> develop
   return ret;
 }
 

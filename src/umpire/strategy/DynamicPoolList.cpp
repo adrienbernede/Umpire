@@ -123,7 +123,12 @@ bool DynamicPoolList::tracksMemoryUse() const noexcept
 void DynamicPoolList::coalesce() noexcept
 {
   UMPIRE_LOG(Debug, "()");
-  UMPIRE_REPLAY("\"event\": \"coalesce\", \"payload\": { \"allocator_name\": \"" << getName() << "\" }");
+  umpire::event::event::builder()
+      .name("coalesce")
+      .category(event::category::operation)
+      .tag("allocator_name", getName())
+      .tag("replay", "true")
+      .record();
   dpa.coalesce(dpa.getActualSize());
 }
 

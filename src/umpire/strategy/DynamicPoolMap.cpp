@@ -253,7 +253,12 @@ void DynamicPoolMap::coalesce()
   UMPIRE_LOG(Debug, "()");
   // Coalesce differs from release in that it puts back a single block of the
   // size it released
-  UMPIRE_REPLAY("\"event\": \"coalesce\", \"payload\": { \"allocator_name\": \"" << getName() << "\" }");
+  umpire::event::event::builder()
+      .name("coalesce")
+      .category(event::category::operation)
+      .tag("allocator_name", getName())
+      .tag("replay", "true")
+      .record();
 
   do_coalesce(getActualSize());
 }

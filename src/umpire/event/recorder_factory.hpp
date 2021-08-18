@@ -10,7 +10,7 @@
 #include "umpire/event/file_recorder.hpp"
 #include "umpire/event/database_recorder.hpp"
 
-using recorder_type = umpire::event::database_recorder;
+using recorder_type = umpire::event::file_recorder;
 
 namespace umpire {
 namespace event {

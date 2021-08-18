@@ -22,7 +22,7 @@ set (umpire_event_sources
   recorder_factory.cpp
   sqlite_database.cpp)
 
-set (umpire_event_depends umpire_tpl_json sqlite3)
+set (umpire_event_depends umpire_tpl_json camp sqlite3)
 
 blt_add_library(
   NAME umpire_event
