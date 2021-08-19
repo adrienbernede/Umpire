@@ -7,6 +7,9 @@
 #ifndef UMPIRE_sqlite_database_HPP
 #define UMPIRE_sqlite_database_HPP
 
+#include "umpire/config.hpp"
+
+#ifdef UMPIRE_ENABLE_SQLITE
 #include "umpire/event/event_store.hpp"
 
 #include <string>
@@ -29,5 +32,6 @@ class sqlite_database : public event_store {
 
 }
 }
+#endif // UMPIRE_ENABLE_SQLITE
 
 #endif // UMPIRE_sqlite_database_HPP

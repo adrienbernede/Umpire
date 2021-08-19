@@ -5,6 +5,8 @@
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
 
+#include "umpire/config.hpp"
+
 #include "umpire/event/sqlite_database.hpp"
 #include "umpire/event/event.hpp"
 #include "umpire/event/event_json.hpp"

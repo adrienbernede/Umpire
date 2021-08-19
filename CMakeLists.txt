@@ -36,6 +36,7 @@ set(ENABLE_COPY_HEADERS Off CACHE BOOL "")
 set(ENABLE_GMOCK On CACHE BOOL "")
 set(ENABLE_CLANGQUERY Off CACHE BOOL "")
 set(ENABLE_DOCS Off CACHE BOOL "")
+set(ENABLE_SQLITE Off CACHE BOOL "")
 
 option(ENABLE_LOGGING "Build Umpire with Logging enabled" On)
 option(ENABLE_SLIC "Build Umpire with SLIC logging" Off)

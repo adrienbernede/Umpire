@@ -11,18 +11,21 @@ set (umpire_event_headers
   quest_database.hpp
   event_store_recorder.hpp
   json_file_store.hpp
-  recorder_factory.hpp
-  sqlite_database.hpp
-  )
+  recorder_factory.hpp)
 
 set (umpire_event_sources
   event_store_recorder.cpp
   quest_database.cpp
   json_file_store.cpp
-  recorder_factory.cpp
-  sqlite_database.cpp)
+  recorder_factory.cpp)
 
-set (umpire_event_depends umpire_tpl_json camp sqlite3)
+set (umpire_event_depends umpire_tpl_json camp)
+
+if (ENABLE_SQLITE)
+  set (umpire_event_headers ${umpire_event_headers} sqlite_database.hpp)
+  set (umpire_event_sources ${umpire_event_sources} sqlite_database.cpp)
+  set (umpire_event_depends ${umpire_event_depends} sqlite3)
+endif()
 
 blt_add_library(
   NAME umpire_event
