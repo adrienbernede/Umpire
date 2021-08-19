@@ -21,15 +21,14 @@ class event;
 class json_file_store : public event_store {
   public:
   
-    json_file_store(const std::string& filename);
+    json_file_store(const std::string& filename, bool read_only = false);
 
     virtual void insert(event e);
 
     virtual std::vector<event> get_events();
 
   private:
-    std::string m_fname;
-    std::ofstream m_fstream;
+    std::fstream m_fstream;
 };
 
 }

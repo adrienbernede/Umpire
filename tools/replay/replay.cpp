@@ -77,7 +77,7 @@ int main(int argc, char* argv[])
 
   CLI11_PARSE(app, argc, argv);
 
-  umpire::event::json_file_store jfile{options.input_file};
+  umpire::event::json_file_store jfile{options.input_file, true};
   std::vector<umpire::event::event> events;
 
   events = jfile.get_events();

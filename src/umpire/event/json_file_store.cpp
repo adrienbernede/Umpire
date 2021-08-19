@@ -16,9 +16,16 @@
 namespace umpire {
 namespace event {
 
-json_file_store::json_file_store(const std::string& filename) :
-  m_fname{filename}, m_fstream{filename}
-{}
+json_file_store::json_file_store(const std::string& filename, bool read_only)
+{
+  std::fstream::openmode mode{read_only ? std::fstream::in : std::fstream::out | std::fstream::trunc};
+
+  m_fstream.open(filename, mode);
+
+  if (m_fstream.fail()) {
+    UMPIRE_ERROR("Failed to open " << filename);
+  }
+}
 
 void 
 json_file_store::insert(event e) {
@@ -28,12 +35,11 @@ json_file_store::insert(event e) {
 
 std::vector<event>
 json_file_store::get_events() {
-  std::ifstream infile{m_fname};
   std::string line;
   std::vector<event> events;
   std::size_t line_number{1};
 
-  while (std::getline(infile, line)) {
+  while (std::getline(m_fstream, line)) {
     nlohmann::json json_event;
     event e;
 
