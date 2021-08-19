@@ -44,8 +44,9 @@ inline void from_json(const nlohmann::json& j, event& e) {
   long dur_ns;
   j.at("timestamp").get_to(dur_ns);
   std::chrono::nanoseconds dur(dur_ns);
-  std::chrono::time_point<std::chrono::system_clock> dt(dur);
-  e.timestamp = dt;
+  std::chrono::time_point<std::chrono::system_clock, std::chrono::nanoseconds> dt_nano(dur);
+  //std::chrono::time_point<std::chrono::system_clock> dt(dur);
+  e.timestamp = std::chrono::time_point_cast<std::chrono::system_clock::duration>(dt_nano);
 }
 
 }
