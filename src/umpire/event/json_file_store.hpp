@@ -17,7 +17,7 @@ namespace event {
 
 class event;
 
-class json_file_store : event_store {
+class json_file_store : public event_store {
   public:
   
   json_file_store(const std::string& filename);

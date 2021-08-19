@@ -13,7 +13,7 @@
 namespace umpire {
 namespace event {
 
-using store_type = json_file_store;
+using store_type = event_store_recorder;
 
 class recorder_factory {
 public:
