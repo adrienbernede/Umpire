@@ -11,7 +11,10 @@
 #include <iostream>
 #include <ratio>
 #include <string>
+#include <vector>
 
+#include "umpire/event/event.hpp"
+#include "umpire/event/json_file_store.hpp"
 #include "umpire/util/Macros.hpp"
 
 #if !defined(_MSC_VER) && !defined(_LIBCPP_VERSION)
@@ -74,6 +77,25 @@ int main(int argc, char* argv[])
 
   CLI11_PARSE(app, argc, argv);
 
+  umpire::event::json_file_store jfile{options.input_file};
+  std::vector<umpire::event::event> events;
+
+  events = jfile.get_events();
+
+  for (auto e : events) {
+    switch (e.cat) {
+      case umpire::event::category::operation:
+        std::cout << "operation" << std::endl; break;
+      case umpire::event::category::statistic:
+        std::cout << "statistic" << std::endl; break;
+      case umpire::event::category::metadata:
+        std::cout << "metadata" << std::endl; break;
+      default:
+        std::cout << "?? " << std::endl; break;
+    }
+  }
+
+#if 0
   std::chrono::high_resolution_clock::time_point t1;
   std::chrono::high_resolution_clock::time_point t2;
   std::chrono::duration<double> time_span;
@@ -99,6 +121,7 @@ int main(int argc, char* argv[])
       std::cout << "Running replay took " << time_span.count() << " seconds." << std::endl;
     }
   }
+#endif
 #else
   UMPIRE_USE_VAR(argc);
   UMPIRE_USE_VAR(argv);

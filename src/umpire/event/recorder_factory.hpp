@@ -7,7 +7,6 @@
 #ifndef UMPIRE_recorder_factory_HPP
 #define UMPIRE_recorder_factory_HPP
 
-#include "umpire/event/json_file_store.hpp"
 #include "umpire/event/event_store_recorder.hpp"
 
 namespace umpire {

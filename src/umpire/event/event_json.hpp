@@ -26,7 +26,7 @@ inline void to_json(nlohmann::json& j, const event& e) {
     { "int_args", e.int_args },
     { "str_args", e.string_args },
     { "tags", e.tags },
-    {"timestamp", std::to_string(static_cast<long>(std::chrono::time_point_cast<std::chrono::nanoseconds>(e.timestamp).time_since_epoch().count()))}
+    {"timestamp", static_cast<long>(std::chrono::time_point_cast<std::chrono::nanoseconds>(e.timestamp).time_since_epoch().count())}
   };
 }
 
@@ -40,6 +40,12 @@ inline void from_json(const nlohmann::json& j, event& e) {
     j.at("str_args").get_to(e.string_args);
   }
   j.at("tags").get_to(e.tags);
+
+  long dur_ns;
+  j.at("timestamp").get_to(dur_ns);
+  std::chrono::nanoseconds dur(dur_ns);
+  std::chrono::time_point<std::chrono::system_clock> dt(dur);
+  e.timestamp = dt;
 }
 
 }

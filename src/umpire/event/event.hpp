@@ -53,7 +53,7 @@ public:
   std::vector<std::pair<std::string, std::string>> tags{};
   std::vector<std::pair<std::string, int>> int_args{};
   std::vector<std::pair<std::string, std::string>> string_args{};
-  const std::chrono::time_point<std::chrono::system_clock> timestamp{};
+  std::chrono::time_point<std::chrono::system_clock> timestamp{};
 };
 
 class event::builder
