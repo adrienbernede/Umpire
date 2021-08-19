@@ -6,7 +6,6 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "umpire/Allocator.hpp"
 
-#include "umpire/Replay.hpp"
 #include "umpire/ResourceManager.hpp"
 #include "umpire/util/Macros.hpp"
 

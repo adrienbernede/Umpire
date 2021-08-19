@@ -18,7 +18,6 @@ endif ()
 set (umpire_headers
   Allocator.hpp
   Allocator.inl
-  Replay.hpp
   ResourceManager.hpp
   ResourceManager.inl
   Tracking.hpp
@@ -28,7 +27,6 @@ set (umpire_headers
 
 set (umpire_sources
   Allocator.cpp
-  Replay.cpp
   ResourceManager.cpp
   Umpire.cpp)
 

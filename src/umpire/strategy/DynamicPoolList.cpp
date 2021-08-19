@@ -7,7 +7,6 @@
 #include "umpire/strategy/DynamicPoolList.hpp"
 
 #include "umpire/Allocator.hpp"
-#include "umpire/Replay.hpp"
 #include "umpire/ResourceManager.hpp"
 #include "umpire/strategy/PoolCoalesceHeuristic.hpp"
 #include "umpire/util/Macros.hpp"

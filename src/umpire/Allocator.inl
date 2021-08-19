@@ -8,7 +8,6 @@
 #define UMPIRE_Allocator_INL
 
 #include "umpire/Allocator.hpp"
-#include "umpire/Replay.hpp"
 #include "umpire/config.hpp"
 #include "umpire/event/event.hpp"
 #include "umpire/event/recorder_factory.hpp"

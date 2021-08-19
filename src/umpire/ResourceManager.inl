@@ -10,7 +10,6 @@
 #include <sstream>
 
 #include "camp/list.hpp"
-#include "umpire/Replay.hpp"
 #include "umpire/ResourceManager.hpp"
 #include "umpire/util/Macros.hpp"
 #include "umpire/util/make_unique.hpp"

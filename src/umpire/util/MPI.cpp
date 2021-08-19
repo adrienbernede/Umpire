@@ -6,7 +6,6 @@
 //////////////////////////////////////////////////////////////////////////////
 #include "umpire/util/MPI.hpp"
 
-#include "umpire/Replay.hpp"
 #include "umpire/config.hpp"
 #include "umpire/util/Macros.hpp"
 

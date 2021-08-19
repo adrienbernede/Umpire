@@ -12,7 +12,6 @@
 #include <sstream>
 
 #include "umpire/Allocator.hpp"
-#include "umpire/Replay.hpp"
 #include "umpire/ResourceManager.hpp"
 #include "umpire/strategy/PoolCoalesceHeuristic.hpp"
 #include "umpire/strategy/mixins/AlignedAllocation.hpp"
