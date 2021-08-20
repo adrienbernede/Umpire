@@ -155,7 +155,7 @@ Allocator ResourceManager::makeResource(const std::string& name, MemoryResourceT
   allocator->setTracking(traits.tracking);
 
   umpire::event::event::builder()
-      .name("make_memork_resource")
+      .name("make_memory_resource")
       .category(event::category::operation)
       .arg("allocator_ref", (void*)allocator.get())
       .arg("introspection", traits.tracking)
