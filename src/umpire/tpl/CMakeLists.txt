@@ -96,6 +96,8 @@ if (NOT TARGET camp)
       TO camp
       SCOPE INTERFACE
       TARGET_DEFINITIONS CAMP_HAVE_CUDA)
+
+    blt_patch_target(NAME camp DEPENDS_ON cuda_runtime)
   endif()
 
   if(ENABLE_HIP)
