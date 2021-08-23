@@ -747,7 +747,7 @@ void ReplayInterpreter::compile_reallocate()
 bool ReplayInterpreter::compile_deallocate()
 {
   const std::string allocator_ref_string{m_event.string_args["allocator_ref"]};
-  const std::string memory_ptr_string{m_event.string_args["memory_ptr"]};
+  const std::string memory_ptr_string{m_event.string_args["pointer"]};
   const std::string memory_ptr_key{allocator_ref_string + memory_ptr_string};
 
   if (m_replaying_reallocate) {
