@@ -11,11 +11,11 @@
 
 #include "umpire/util/Macros.hpp"
 
+#include <map>
 #include <sstream>
 #include <string>
 #include <type_traits>
 #include <utility>
-#include <vector>
 
 #include "camp/camp.hpp"
 
@@ -50,9 +50,10 @@ public:
 
   std::string name{"anon"};
   category cat{category::statistic};
-  std::vector<std::pair<std::string, std::string>> tags{};
-  std::vector<std::pair<std::string, int>> int_args{};
-  std::vector<std::pair<std::string, std::string>> string_args{};
+  std::map<std::string, std::string> tags{};
+  std::map<std::string, int> int_args{};
+  std::map<std::string, std::size_t> sizet_args{};
+  std::map<std::string, std::string> string_args{};
   std::chrono::time_point<std::chrono::system_clock> timestamp{};
 };
 
@@ -74,19 +75,21 @@ public:
     return *this;
   }
 
+  builder& arg(const std::string& k, std::size_t v) {
+    if (event_enabled)
+      e.sizet_args[k] = v;
+    return *this;
+  }
+
   builder& arg(const std::string& k, int v) {
     if (event_enabled)
-      e.int_args.push_back(
-        std::make_pair(k, v)
-      );
+      e.int_args[k] = v;
     return *this;
   }
 
   builder& arg(const std::string& k, const std::string& v) {
     if (event_enabled)
-      e.string_args.push_back(
-        std::make_pair(k, v)
-      );
+      e.string_args[k] = v;
     return *this;
   }
 
@@ -109,9 +112,7 @@ public:
       std::stringstream ss;
       ss << p;  
       std::string pointer{ss.str()}; 
-      e.string_args.push_back(
-        std::make_pair(k, pointer)
-      );
+      e.string_args[k] = pointer;
     }
     return *this;
   }
@@ -129,9 +130,7 @@ public:
 
   builder& tag(const std::string& t, const std::string& v) {
     if (event_enabled)
-      e.tags.push_back(
-        std::make_pair(t, v)
-      );
+      e.tags[t] = v;
     return *this;
   }
 

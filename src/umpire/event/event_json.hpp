@@ -24,7 +24,8 @@ inline void to_json(nlohmann::json& j, const event& e) {
     { "name", e.name },
     { "category", e.cat },
     { "int_args", e.int_args },
-    { "str_args", e.string_args },
+    { "sizet_args", e.sizet_args },
+    { "string_args", e.string_args },
     { "tags", e.tags },
     {"timestamp", static_cast<long>(std::chrono::time_point_cast<std::chrono::nanoseconds>(e.timestamp).time_since_epoch().count())}
   };
@@ -36,8 +37,11 @@ inline void from_json(const nlohmann::json& j, event& e) {
   if (j.find("int_args") != j.end()) {
     j.at("int_args").get_to(e.int_args);
   }
-  if (j.find("str_args") != j.end()) {
-    j.at("str_args").get_to(e.string_args);
+  if (j.find("sizet_args") != j.end()) {
+    j.at("sizet_args").get_to(e.sizet_args);
+  }
+  if (j.find("string_args") != j.end()) {
+    j.at("string_args").get_to(e.string_args);
   }
   j.at("tags").get_to(e.tags);
 
