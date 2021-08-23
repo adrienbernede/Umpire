@@ -37,7 +37,6 @@ struct ReplayUseHeuristicValidator : public CLI::Validator {
 struct ReplayOptions {
   bool time_replay_run{false};    // -t,--time-run
   bool time_replay_parse{false};  // --time-parse
-  bool info_only{false};          // --info
   bool dump_statistics{false};    // -d, --dump
   bool track_stats{false};        // -s, --stats
   bool skip_operations{false};    // --skip-operations

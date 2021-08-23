@@ -54,8 +54,8 @@ quest_database::insert(event e)
 
   data << " ";
 
-  const std::string sep = (e.int_args.size()) > 1 ? "," : "";
-  for (const auto& it : e.int_args ) {
+  const std::string sep = (e.numeric_args.size()) > 1 ? "," : "";
+  for (const auto& it : e.numeric_args ) {
     std::string name;
     int value;
     std::tie(name, value) = it;

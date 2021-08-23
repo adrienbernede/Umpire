@@ -11,6 +11,7 @@
 
 #include "umpire/util/Macros.hpp"
 
+#include <cstdint>
 #include <map>
 #include <sstream>
 #include <string>
@@ -50,10 +51,9 @@ public:
 
   std::string name{"anon"};
   category cat{category::statistic};
-  std::map<std::string, std::string> tags{};
-  std::map<std::string, int> int_args{};
-  std::map<std::string, std::size_t> sizet_args{};
   std::map<std::string, std::string> string_args{};
+  std::map<std::string, std::uintmax_t> numeric_args{};
+  std::map<std::string, std::string> tags{};
   std::chrono::time_point<std::chrono::system_clock> timestamp{};
 };
 
@@ -75,15 +75,13 @@ public:
     return *this;
   }
 
-  builder& arg(const std::string& k, std::size_t v) {
-    if (event_enabled)
-      e.sizet_args[k] = v;
-    return *this;
-  }
-
-  builder& arg(const std::string& k, int v) {
-    if (event_enabled)
-      e.int_args[k] = v;
+  builder& arg(const std::string& k, void* p) {
+    if (event_enabled) {
+      std::stringstream ss;
+      ss << p;  
+      std::string pointer{ss.str()}; 
+      e.string_args[k] = pointer;
+    }
     return *this;
   }
 
@@ -102,19 +100,16 @@ public:
   }
 
   template<typename T>
-  builder& arg(const std::string& k, T v) {
-    using std::to_string;
-    return arg(k, to_string(v));
+  std::enable_if_t<std::is_arithmetic<T>::value, builder&> arg(const std::string& k, T v) {
+    if (event_enabled)
+      e.numeric_args[k] = static_cast<std::uintmax_t>(v);
+    return *this;
   }
 
-  builder& arg(const std::string& k, void* p) {
-    if (event_enabled) {
-      std::stringstream ss;
-      ss << p;  
-      std::string pointer{ss.str()}; 
-      e.string_args[k] = pointer;
-    }
-    return *this;
+  template<typename T>
+  std::enable_if_t<!std::is_arithmetic<T>::value, builder&> arg(const std::string& k, T v) {
+    using std::to_string;
+    return arg(k, to_string(v));
   }
 
   template<typename... Ts, std::size_t... N>
