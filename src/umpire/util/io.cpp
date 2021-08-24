@@ -43,12 +43,6 @@ std::ostream& log()
   return out;
 }
 
-std::ostream& replay()
-{
-  static std::ostream out{nullptr};
-  return out;
-}
-
 std::ostream& error()
 {
   static std::ostream out{std::cerr.rdbuf()};
@@ -57,18 +51,15 @@ std::ostream& error()
 
 namespace util {
 
-void initialize_io(const bool enable_log, const bool enable_replay)
+void initialize_io(const bool enable_log)
 {
   static util::OutputBuffer s_log_buffer;
-  static util::OutputBuffer s_replay_buffer;
   static util::OutputBuffer s_error_buffer;
 
   s_log_buffer.setConsoleStream(nullptr);
-  s_replay_buffer.setConsoleStream(nullptr);
   s_error_buffer.setConsoleStream(&std::cerr);
 
   log().rdbuf(&s_log_buffer);
-  replay().rdbuf(&s_replay_buffer);
   error().rdbuf(&s_error_buffer);
 
   const std::string& root_io_dir{util::get_io_output_dir()};
@@ -78,8 +69,6 @@ void initialize_io(const bool enable_log, const bool enable_replay)
 
   const std::string log_filename{make_unique_filename(root_io_dir, file_basename, pid, "log")};
 
-  const std::string replay_filename{make_unique_filename(root_io_dir, file_basename, pid, "replay")};
-
   const std::string error_filename{make_unique_filename(root_io_dir, file_basename, pid, "error")};
 
   if (!directory_exists(root_io_dir)) {
@@ -88,13 +77,13 @@ void initialize_io(const bool enable_log, const bool enable_replay)
 #if defined(UMPIRE_ENABLE_FILESYSTEM)
         std::filesystem::path root_io_dir_path{root_io_dir};
 
-        if (!std::filesystem::exists(root_io_dir_path) && (enable_log || enable_replay)) {
+        if (!std::filesystem::exists(root_io_dir_path) && enable_log) {
           std::filesystem::create_directories(root_io_dir_path);
         }
 #else
         struct stat info;
         if (stat(root_io_dir.c_str(), &info)) {
-          if (enable_log || enable_replay) {
+          if (enable_log) {
 #ifndef WIN32
             if (mkdir(root_io_dir.c_str(), S_IRWXU | S_IRGRP | S_IXGRP | S_IROTH | S_IXOTH)) {
               UMPIRE_ERROR("mkdir(" << root_io_dir << ") failed");
@@ -128,23 +117,12 @@ void initialize_io(const bool enable_log, const bool enable_replay)
     }
   }
 
-  if (enable_replay) {
-    static std::ofstream s_replay_ofstream{replay_filename};
-
-    if (s_replay_ofstream) {
-      s_replay_buffer.setFileStream(&s_replay_ofstream);
-    } else {
-      UMPIRE_ERROR("Couldn't open replay file:" << replay_filename);
-    }
-  }
-
   MPI::logMpiInfo();
 }
 
 void flush_files()
 {
   log().flush();
-  replay().flush();
   error().flush();
 }
 

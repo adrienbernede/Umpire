@@ -23,9 +23,6 @@ inline void* AllocatorBase<Tracked>::allocate(std::size_t bytes)
 
   UMPIRE_LOG(Debug, "(" << bytes << ")");
 
-  UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \"" << m_allocator
-                                                                                << "\", \"size\": " << bytes << " }");
-
   if (0 == bytes) {
     ret = allocateNull();
   } else {
@@ -34,18 +31,12 @@ inline void* AllocatorBase<Tracked>::allocate(std::size_t bytes)
 
   registerAllocation(ret, bytes, m_allocator);
 
-  UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
-                << m_allocator << "\", \"size\": " << bytes << " }, \"result\": { \"memory_ptr\": \"" << ret << "\" }");
-
   return ret;
 }
 
 template <>
 inline void AllocatorBase<Tracked>::deallocate(void* ptr)
 {
-  UMPIRE_REPLAY("\"event\": \"deallocate\", \"payload\": { \"allocator_ref\": \""
-                << m_allocator << "\", \"memory_ptr\": \"" << ptr << "\" }");
-
   UMPIRE_LOG(Debug, "(" << ptr << ")");
 
   if (!ptr) {
@@ -70,17 +61,11 @@ inline void* AllocatorBase<Untracked>::allocate(std::size_t bytes)
 
   UMPIRE_LOG(Debug, "(" << bytes << ")");
 
-  UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \"" << m_allocator
-                                                                                << "\", \"size\": " << bytes << " }");
-
   if (0 == bytes) {
     ret = allocateNull();
   } else {
     ret = m_allocator->allocate(bytes);
   }
-
-  UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
-                << m_allocator << "\", \"size\": " << bytes << " }, \"result\": { \"memory_ptr\": \"" << ret << "\" }");
 
   return ret;
 }
@@ -88,9 +73,6 @@ inline void* AllocatorBase<Untracked>::allocate(std::size_t bytes)
 template <>
 inline void AllocatorBase<Untracked>::deallocate(void* ptr)
 {
-  UMPIRE_REPLAY("\"event\": \"deallocate\", \"payload\": { \"allocator_ref\": \""
-                << m_allocator << "\", \"memory_ptr\": \"" << ptr << "\" }");
-
   UMPIRE_LOG(Debug, "(" << ptr << ")");
 
   if (!ptr) {
@@ -114,8 +96,6 @@ AllocatorBase<Tracking>::AllocatorBase(strategy::AllocationStrategy* allocator) 
 template <typename Tracking>
 void AllocatorBase<Tracking>::release()
 {
-  UMPIRE_REPLAY("\"event\": \"release\", \"payload\": { \"allocator_ref\": \"" << m_allocator << "\" }");
-
   UMPIRE_LOG(Debug, "");
 
   m_allocator->release();

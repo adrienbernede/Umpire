@@ -62,13 +62,10 @@ ResourceManager::ResourceManager()
 {
   UMPIRE_LOG(Debug, "() entering");
 
-  const char* env_enable_replay{getenv("UMPIRE_REPLAY")};
-  const bool enable_replay{env_enable_replay != nullptr};
-
   const char* env_enable_log{getenv("UMPIRE_LOG_LEVEL")};
   const bool enable_log{env_enable_log != nullptr};
 
-  util::initialize_io(enable_log, enable_replay);
+  util::initialize_io(enable_log);
 
   initialize();
 

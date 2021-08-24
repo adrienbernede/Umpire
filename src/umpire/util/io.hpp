@@ -14,7 +14,6 @@ namespace umpire {
 
 // Output streams
 std::ostream& log();
-std::ostream& replay();
 std::ostream& error();
 
 namespace util {
@@ -33,7 +32,7 @@ const std::string& get_io_output_basename();
  * \brief Initialize the streams. This method is called when ResourceManger is
  * initialized. Do not call this manually.
  */
-void initialize_io(const bool enable_log, const bool enable_replay);
+void initialize_io(const bool enable_log);
 
 /*!
  * \brief Synchronize all stream buffers to their respective output sequences.
