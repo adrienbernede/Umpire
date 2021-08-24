@@ -535,18 +535,25 @@ void* ResourceManager::reallocate(void* current_ptr, std::size_t new_size)
     strategy = getDefaultAllocator().getAllocationStrategy();
   }
 
-  auto event = umpire::event::event::builder()
+  umpire::event::event::builder()
       .name("reallocate")
       .category(event::category::operation)
-      .arg("ptr", current_ptr)
+      .arg("current_ptr", current_ptr)
       .arg("size", new_size)
       .arg("allocator_ref", (void*)strategy)
       .tag("allocator_name", strategy->getName())
-      .tag("replay", "true");
+      .tag("replay", "true")
+      .record();
 
   void* new_ptr{reallocate_impl(current_ptr, new_size, Allocator(strategy))};
 
-  event.arg("new_ptr", new_ptr).record();
+  umpire::event::event::builder()
+      .name("reallocate")
+      .category(event::category::operation)
+      .arg("allocator_ref", (void*)strategy)
+      .tag("allocator_name", strategy->getName())
+      .arg("new_ptr", new_ptr)
+      .record();
 
   return new_ptr;
 }
@@ -562,37 +569,51 @@ void* ResourceManager::reallocate(void* current_ptr, std::size_t new_size, camp:
     strategy = getDefaultAllocator().getAllocationStrategy();
   }
 
-  auto event = umpire::event::event::builder()
+  umpire::event::event::builder()
       .name("reallocate")
       .category(event::category::operation)
-      .arg("ptr", current_ptr)
+      .arg("current_ptr", current_ptr)
       .arg("size", new_size)
       .arg("allocator_ref", (void*)strategy)
       .tag("allocator_name", strategy->getName())
       .tag("replay", "true")
-      .tag("async", "true");
+      .tag("async", "true")
+      .record();
 
   void* new_ptr{reallocate_impl(current_ptr, new_size, Allocator(strategy), ctx)};
 
-  event.arg("new_ptr", new_ptr).record();
+  umpire::event::event::builder()
+      .name("reallocate")
+      .category(event::category::operation)
+      .arg("new_ptr", new_ptr)
+      .arg("allocator_ref", (void*)strategy)
+      .tag("allocator_name", strategy->getName())
+      .record();
 
   return new_ptr;
 }
 
 void* ResourceManager::reallocate(void* current_ptr, std::size_t new_size, Allocator alloc)
 {
-  auto event = umpire::event::event::builder()
+  umpire::event::event::builder()
       .name("reallocate")
       .category(event::category::operation)
-      .arg("ptr", current_ptr)
+      .arg("current_ptr", current_ptr)
       .arg("size", new_size)
       .arg("allocator_ref", (void*)alloc.getAllocationStrategy())
       .tag("allocator_name", alloc.getName())
-      .tag("replay", "true");
+      .tag("replay", "true")
+      .record();
 
   void* new_ptr{reallocate_impl(current_ptr, new_size, alloc)};
 
-  event.arg("new_ptr", new_ptr).record();
+  umpire::event::event::builder()
+      .name("reallocate")
+      .category(event::category::operation)
+      .arg("new_ptr", new_ptr)
+      .arg("allocator_ref", (void*)alloc.getAllocationStrategy())
+      .tag("allocator_name", alloc.getName())
+      .record();
 
   return new_ptr;
 }
@@ -600,19 +621,26 @@ void* ResourceManager::reallocate(void* current_ptr, std::size_t new_size, Alloc
 void* ResourceManager::reallocate(void* current_ptr, std::size_t new_size, Allocator alloc,
                                   camp::resources::Resource& ctx)
 {
-  auto event = umpire::event::event::builder()
+  umpire::event::event::builder()
       .name("reallocate")
       .category(event::category::operation)
-      .arg("ptr", current_ptr)
+      .arg("current_ptr", current_ptr)
       .arg("size", new_size)
       .arg("allocator_ref", (void*)alloc.getAllocationStrategy())
       .tag("allocator_name", alloc.getName())
       .tag("replay", "true")
-      .tag("async", "true");
+      .tag("async", "true")
+      .record();
 
   void* new_ptr{reallocate_impl(current_ptr, new_size, alloc, ctx)};
 
-  event.arg("new_ptr", new_ptr).record();
+  umpire::event::event::builder()
+      .name("reallocate")
+      .category(event::category::operation)
+      .arg("new_ptr", new_ptr)
+      .arg("allocator_ref", (void*)alloc.getAllocationStrategy())
+      .tag("allocator_name", alloc.getName())
+      .record();
 
   return new_ptr;
 }

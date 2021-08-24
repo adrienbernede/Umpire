@@ -143,6 +143,12 @@ void ReplayInterpreter::buildOperations()
         m_release_ops++;
         compile_release();
       }
+      else if ( m_event.name == "register_external_allocation" ) {
+        std::cout << "TODO: replay for external registration" << std::endl;
+      }
+      else if ( m_event.name == "deregister_external_allocation" ) {
+        std::cout << "TODO: add replay for external deregistration" << std::endl;
+      }
       else {
         REPLAY_ERROR("Unknown Replay Operation: " << m_ops->getLine(m_line_number));
       }
@@ -159,7 +165,7 @@ void ReplayInterpreter::buildOperations()
   m_ops = new ReplayFile{m_options};
 
   if ( ! m_options.quiet ) {
-    const std::size_t allocations_performed{m_allocate_ops/2};
+    const std::size_t allocations_performed{m_allocate_ops};
     const std::size_t deallocations_skipped{m_deallocate_due_to_reallocate + m_deallocate_rogue_ignored};
     const std::size_t deallocations_performed{m_deallocate_ops - deallocations_skipped};
     const std::size_t leaked_allocations{allocations_performed - deallocations_performed};
@@ -167,7 +173,7 @@ void ReplayInterpreter::buildOperations()
     std::cout
       << "Replay File Version: " << m_log_version_major << "." << m_log_version_minor << "." << m_log_version_patch << std::endl
       << std::setw(12) << m_make_memory_resource_ops << " makeMemoryResource operations" << std::endl
-      << std::setw(12) << m_make_allocator_ops/2 << " makeAllocator operations" << std::endl
+      << std::setw(12) << m_make_allocator_ops << " makeAllocator operations" << std::endl
       << std::endl
       << std::setw(12) << allocations_performed << " allocate operations" << std::endl
       << std::setw(12) << deallocations_performed << " deallocate performed (" << leaked_allocations << " leaked)" << std::endl
@@ -407,11 +413,11 @@ void ReplayInterpreter::compile_make_allocator()
     type = raw_mangled_type;
   }
 
-  const std::string base_allocator_name{m_event.string_args["args0"]};
+  const std::string base_allocator_name{m_event.string_args["arg0"]};
   alloc->argc = 1;
 
   if ( type == "umpire::strategy::AllocationAdvisor" ) {
-    const std::string advice_operation{m_event.string_args["args1"]};
+    const std::string advice_operation{m_event.string_args["arg1"]};
     alloc->argc++;
 
     int device_id{-1};   // Use default argument if negative
@@ -443,7 +449,7 @@ void ReplayInterpreter::compile_make_allocator()
       case 3:
         break;
       case 4:
-        const std::string accessing_allocator_name{m_event.string_args["args2"]};
+        const std::string accessing_allocator_name{m_event.string_args["arg2"]};
         m_ops->copyString(accessing_allocator_name, alloc->argv.advisor.accessing_allocator);
         break;
       }
@@ -455,7 +461,7 @@ void ReplayInterpreter::compile_make_allocator()
       case 2:
         break;
       case 3:
-        const std::string accessing_allocator_name{m_event.string_args["args2"]};
+        const std::string accessing_allocator_name{m_event.string_args["arg2"]};
         m_ops->copyString(accessing_allocator_name, alloc->argv.advisor.accessing_allocator);
         break;
       }
@@ -467,7 +473,7 @@ void ReplayInterpreter::compile_make_allocator()
   }
   else if ( type == "umpire::strategy::NumaPolicy" ) {
     alloc->type = ReplayFile::rtype::NUMA_POLICY;
-    alloc->argv.numa.node = m_event.numeric_args["args1"];
+    alloc->argv.numa.node = m_event.numeric_args["arg1"];
     alloc->argc++;
 
     m_ops->copyString(base_allocator_name, alloc->base_name);
@@ -645,35 +651,6 @@ void ReplayInterpreter::compile_make_allocator()
   hdr->num_operations++;
 }
 
-void ReplayInterpreter::compile_allocate()
-{
-  if (m_replaying_reallocate) {
-    return;
-  }
-
-  ReplayFile::Header* hdr = m_ops->getOperationsTable();
-  ReplayFile::Operation* op = &hdr->ops[hdr->num_operations];
-  const std::string allocator_ref_string{m_event.string_args["allocator_ref"]};
-  const std::size_t alloc_size{m_event.numeric_args["size"]};
-
-  memset(op, 0, sizeof(*op));
-
-  op->op_type = ReplayFile::otype::ALLOCATE;
-  op->op_line_number = m_line_number;
-  op->op_allocator = getAllocatorIndex(allocator_ref_string);
-  op->op_size = alloc_size;
-  std::string memory_ptr_string{m_event.string_args["pointer"]};
-  const std::string memory_ptr_key{allocator_ref_string + memory_ptr_string};
-
-  if ( m_allocation_id.find(memory_ptr_key) != m_allocation_id.end() ) {
-    REPLAY_ERROR("Pointer already allocated: " << m_ops->getLine(m_line_number) << std::endl);
-  }
-
-  op->op_line_number = m_line_number;
-  m_allocation_id.insert({memory_ptr_key, hdr->num_operations});
-  hdr->num_operations++;
-}
-
 void ReplayInterpreter::compile_set_default_allocator()
 {
   const std::string allocator_ref_string{m_event.string_args["allocator_ref"]};
@@ -705,59 +682,91 @@ uint64_t ReplayInterpreter::getPointer(std::string ptr_name)
   return ptr;
 }
 
-void ReplayInterpreter::compile_reallocate()
+void ReplayInterpreter::compile_allocate()
 {
-  const std::size_t alloc_size{m_event.numeric_args["size"]};
-  const std::string allocator_ref_string{m_event.string_args["allocator_ref"]};
-  const std::string ptr_string{m_event.string_args["ptr"]};
-  const std::string new_ptr_str{m_event.string_args["new_ptr"]};
+  if (m_replaying_reallocate)
+    return;
 
-  m_replaying_reallocate = true;
-
-  ReplayFile::Header* hdr = m_ops->getOperationsTable();
-  ReplayFile::Operation* op = &hdr->ops[hdr->num_operations];
-
-  const std::string ptr_key{allocator_ref_string + ptr_string};
-  const uint64_t ptr{ getPointer(ptr_string) };
-
-  if ( ptr != 0 && (m_allocation_id.find(ptr_key) == m_allocation_id.end()) ) {
-      REPLAY_ERROR("Rogue: " << m_ops->getLine(m_line_number) << std::endl);
-  }
+  ReplayFile::Header* hdr{m_ops->getOperationsTable()};
+  ReplayFile::Operation* op{&hdr->ops[hdr->num_operations]};
+  const std::string allocator_ref{m_event.string_args["allocator_ref"]};
+  const std::size_t allocation_size{m_event.numeric_args["size"]};
+  std::string pointer_string{m_event.string_args["pointer"]};
+  const std::string pointer_key{allocator_ref + pointer_string};
 
   memset(op, 0, sizeof(*op));
-  op->op_type = ReplayFile::otype::REALLOCATE_EX;
+
+  op->op_type = ReplayFile::otype::ALLOCATE;
   op->op_line_number = m_line_number;
-  op->op_alloc_ops[1] = (ptr == 0) ? 0 : m_allocation_id[ptr_key];
-  op->op_size = alloc_size;
-  op->op_allocator = getAllocatorIndex(allocator_ref_string);
+  op->op_allocator = getAllocatorIndex(allocator_ref);
+  op->op_size = allocation_size;
 
-  if (ptr != 0)
-    m_allocation_id.erase(ptr_key);
-
-  const std::string memory_ptr_key{allocator_ref_string + new_ptr_str};
-
-  if ( m_allocation_id.find(memory_ptr_key) != m_allocation_id.end() ) {
-      REPLAY_ERROR("Pointer already allocated: " << m_ops->getLine(m_line_number) << std::endl);
+  if ( m_allocation_id.find(pointer_key) != m_allocation_id.end() ) {
+    REPLAY_ERROR("Pointer already allocated: " << m_ops->getLine(m_line_number) << std::endl);
   }
-  m_allocation_id.insert({memory_ptr_key, hdr->num_operations});
+
+  op->op_line_number = m_line_number;
+  m_allocation_id.insert({pointer_key, hdr->num_operations});
   hdr->num_operations++;
-  m_replaying_reallocate = false;
+}
+
+void ReplayInterpreter::compile_reallocate()
+{
+  const std::string      allocator_ref{m_event.string_args["allocator_ref"]};
+  ReplayFile::Header*    hdr{m_ops->getOperationsTable()};
+  ReplayFile::Operation* op{&hdr->ops[hdr->num_operations]};
+
+  if (m_event.string_args.find("new_ptr") == m_event.string_args.end() ) {
+    //
+    // First of two reallocate replays
+    //
+    const std::size_t allocation_size{m_event.numeric_args["size"]};
+    const std::string current_ptr_string{m_event.string_args["current_ptr"]};
+    const std::string current_ptr_key{allocator_ref + current_ptr_string};
+    const uint64_t current_ptr{ getPointer(current_ptr_string) };
+
+    m_replaying_reallocate = true;
+
+    if ( current_ptr != 0 && (m_allocation_id.find(current_ptr_key) == m_allocation_id.end()) ) {
+        REPLAY_ERROR("Rogue: " << m_ops->getLine(m_line_number) << std::endl);
+    }
+
+    memset(op, 0, sizeof(*op));
+    op->op_type = ReplayFile::otype::REALLOCATE_EX;
+    op->op_line_number = m_line_number;
+    op->op_alloc_ops[1] = (current_ptr == 0) ? 0 : m_allocation_id[current_ptr_key];
+    op->op_size = allocation_size;
+    op->op_allocator = getAllocatorIndex(allocator_ref);
+
+    if (current_ptr != 0)
+      m_allocation_id.erase(current_ptr_key);
+  }
+  else {
+    const std::string new_ptr_string{m_event.string_args["new_ptr"]};
+    const std::string new_ptr_key{allocator_ref + new_ptr_string};
+
+    if ( m_allocation_id.find(new_ptr_key) != m_allocation_id.end() ) {
+      REPLAY_ERROR("Pointer already allocated: " << m_ops->getLine(m_line_number) << std::endl);
+    }
+    m_allocation_id.insert({new_ptr_key, hdr->num_operations});
+    hdr->num_operations++;
+    m_replaying_reallocate = false;
+  }
 }
 
 bool ReplayInterpreter::compile_deallocate()
 {
-  const std::string allocator_ref_string{m_event.string_args["allocator_ref"]};
+  const std::string allocator_ref{m_event.string_args["allocator_ref"]};
   const std::string memory_ptr_string{m_event.string_args["pointer"]};
-  const std::string memory_ptr_key{allocator_ref_string + memory_ptr_string};
+  const std::string memory_ptr_key{allocator_ref + memory_ptr_string};
 
-  if (m_replaying_reallocate) {
+  if (m_replaying_reallocate)
     return false;
-  }
 
   ReplayFile::Header* hdr = m_ops->getOperationsTable();
 
   if ( m_allocation_id.find(memory_ptr_key) == m_allocation_id.end() ) {
-    int id{getAllocatorIndex(allocator_ref_string)};
+    int id{getAllocatorIndex(allocator_ref)};
 
     std::cerr
       << "[IGNORED] Rogue deallocate ptr= " << memory_ptr_string
@@ -776,7 +785,7 @@ bool ReplayInterpreter::compile_deallocate()
 
   op->op_type = ReplayFile::otype::DEALLOCATE;
   op->op_line_number = m_line_number;
-  op->op_allocator = getAllocatorIndex(allocator_ref_string);
+  op->op_allocator = getAllocatorIndex(allocator_ref);
   op->op_alloc_ops[0] = m_allocation_id[memory_ptr_key];
   hdr->num_operations++;
 
