@@ -21,6 +21,11 @@ set (umpire_event_sources
 
 set (umpire_event_depends umpire_tpl_json camp)
 
+if (NOT WIN32)
+set (umpire_event_headers ${umpire_event_headers} quest_database.hpp)
+set (umpire_event_sources ${umpire_event_sources} quest_database.cpp)
+endif()
+
 if (ENABLE_SQLITE)
   set (umpire_event_headers ${umpire_event_headers} sqlite_database.hpp)
   set (umpire_event_sources ${umpire_event_sources} sqlite_database.cpp)

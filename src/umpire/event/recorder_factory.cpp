@@ -9,7 +9,9 @@
 
 #include "umpire/config.hpp"
 #include "umpire/event/json_file_store.hpp"
+#ifndef WIN32
 #include "umpire/event/quest_database.hpp"
+#endif
 #ifdef UMPIRE_ENABLE_SQLITE
 #include "umpire/event/sqlite_database.hpp"
 #endif // UMPIRE_ENABLE_SQLITE
