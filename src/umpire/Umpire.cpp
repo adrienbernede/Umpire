@@ -244,8 +244,8 @@ void register_external_allocation(void* ptr, util::AllocationRecord record)
   rm.registerAllocation(ptr, record);
 }
 
-util::AllocationRecord deregister_external_allocation(void* ptr) {
-
+util::AllocationRecord deregister_external_allocation(void* ptr)
+{
   umpire::event::event::builder()
       .name("deregister_external_allocation")
       .category(event::category::operation)

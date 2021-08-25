@@ -15,11 +15,11 @@ namespace event {
 using store_type = event_store_recorder;
 
 class recorder_factory {
-public:
-static store_type& get_recorder();
+ public:
+  static store_type& get_recorder();
 };
 
-}
-}
+} // namespace event
+} // namespace umpire
 
 #endif

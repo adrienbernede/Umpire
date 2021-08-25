@@ -10,10 +10,11 @@
 #include "umpire/config.hpp"
 
 #ifdef UMPIRE_ENABLE_SQLITE
-#include "umpire/event/event_store.hpp"
+#include <sqlite3.h>
 
 #include <string>
-#include <sqlite3.h>
+
+#include "umpire/event/event_store.hpp"
 
 namespace umpire {
 namespace event {
@@ -21,17 +22,17 @@ namespace event {
 class event;
 
 class sqlite_database : public event_store {
-  public:
+ public:
   sqlite_database(const std::string& name);
   void insert(event e) override final;
   std::vector<event> get_events() override final;
 
-  private:
+ private:
   sqlite3* m_database;
 };
 
-}
-}
+} // namespace event
+} // namespace umpire
 #endif // UMPIRE_ENABLE_SQLITE
 
 #endif // UMPIRE_sqlite_database_HPP

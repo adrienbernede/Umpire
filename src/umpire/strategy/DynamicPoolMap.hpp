@@ -182,7 +182,8 @@ class UMPIRE_DEPRECATE("use QuickPool instead") DynamicPoolMap : public Allocati
 
 std::ostream& operator<<(std::ostream& out, PoolCoalesceHeuristic<DynamicPoolMap>&);
 
-inline std::string to_string(PoolCoalesceHeuristic<DynamicPoolMap>&) {
+inline std::string to_string(PoolCoalesceHeuristic<DynamicPoolMap>&)
+{
   return "PoolCoalesceHeuristic<DynamicPoolMap>";
 }
 

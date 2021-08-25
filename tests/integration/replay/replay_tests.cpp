@@ -312,8 +312,8 @@ static void runTest()
   {
     int* data[10];
     umpire::register_external_allocation(
-      data,
-      umpire::util::AllocationRecord(data, 10*sizeof(int), rm.getAllocator("HOST").getAllocationStrategy(), "external array"));
+        data, umpire::util::AllocationRecord(data, 10 * sizeof(int), rm.getAllocator("HOST").getAllocationStrategy(),
+                                             "external array"));
     umpire::deregister_external_allocation(data);
   }
 }

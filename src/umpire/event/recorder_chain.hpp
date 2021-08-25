@@ -11,13 +11,11 @@ namespace umpire {
 namespace event {
 
 class recorder_chain {
-  public:
+ public:
   void record(event e);
-
-
 };
 
-}
-}
+} // namespace event
+} // namespace umpire
 
 #endif // UMPIRE_recorder_chain_INL

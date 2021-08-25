@@ -748,13 +748,13 @@ void* ResourceManager::move(void* ptr, Allocator allocator)
 {
   UMPIRE_LOG(Debug, "(src_ptr=" << ptr << ", allocator=" << allocator.getName() << ")");
 
-  auto event =  umpire::event::event::builder()
-      .name("move")
-      .category(event::category::operation)
-      .arg("ptr", ptr)
-      .arg("allocator_ref", (void*)allocator.getAllocationStrategy())
-      .tag("allocator_name", allocator.getName())
-      .tag("replay", "true");
+  auto event = umpire::event::event::builder()
+                   .name("move")
+                   .category(event::category::operation)
+                   .arg("ptr", ptr)
+                   .arg("allocator_ref", (void*)allocator.getAllocationStrategy())
+                   .tag("allocator_name", allocator.getName())
+                   .tag("replay", "true");
 
   auto alloc_record = m_allocations.find(ptr);
 

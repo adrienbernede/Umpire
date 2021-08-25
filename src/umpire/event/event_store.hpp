@@ -15,13 +15,13 @@ namespace event {
 class event;
 
 class event_store {
-  public:
+ public:
   virtual void insert(event e) = 0;
 
   virtual std::vector<event> get_events() = 0;
 };
 
-}
-}
+} // namespace event
+} // namespace umpire
 
 #endif // UMPIRE_event_store_HPP

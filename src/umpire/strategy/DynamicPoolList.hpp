@@ -116,7 +116,8 @@ class DynamicPoolList : public AllocationStrategy {
 
 std::ostream& operator<<(std::ostream& out, PoolCoalesceHeuristic<DynamicPoolList>&);
 
-inline std::string to_string(PoolCoalesceHeuristic<DynamicPoolList>&) {
+inline std::string to_string(PoolCoalesceHeuristic<DynamicPoolList>&)
+{
   return "PoolCoalesceHeuristic<DynamicPoolList>";
 }
 

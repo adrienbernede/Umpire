@@ -171,7 +171,8 @@ class QuickPool : public AllocationStrategy, private mixins::AlignedAllocation {
 
 std::ostream& operator<<(std::ostream& out, umpire::strategy::PoolCoalesceHeuristic<QuickPool>&);
 
-inline std::string to_string(PoolCoalesceHeuristic<QuickPool>&) {
+inline std::string to_string(PoolCoalesceHeuristic<QuickPool>&)
+{
   return "PoolCoalesceHeuristic<QuickPool>";
 }
 

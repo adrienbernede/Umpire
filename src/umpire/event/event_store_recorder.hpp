@@ -15,15 +15,15 @@ namespace event {
 class event;
 
 class event_store_recorder {
-  public:
+ public:
   event_store_recorder(event_store* db);
 
   void record(event e);
 
-  private:
-   event_store* m_database;
+ private:
+  event_store* m_database;
 };
 
-}
-}
+} // namespace event
+} // namespace umpire
 #endif // UMPIRE_event_store_recorder_HPP

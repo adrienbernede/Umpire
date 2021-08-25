@@ -201,7 +201,8 @@ class Allocator : private strategy::mixins::Inspector, strategy::mixins::Allocat
   bool m_tracking{true};
 };
 
-inline std::string to_string(const Allocator& a) {
+inline std::string to_string(const Allocator& a)
+{
   return a.getName();
 }
 

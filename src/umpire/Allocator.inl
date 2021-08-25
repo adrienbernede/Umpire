@@ -80,7 +80,7 @@ inline void* Allocator::allocate(const std::string& name, std::size_t bytes)
 
 inline void Allocator::deallocate(void* ptr)
 {
-//#if defined(UMPIRE_ENABLE_EVENTS)
+  //#if defined(UMPIRE_ENABLE_EVENTS)
   umpire::event::event::builder()
       .name("deallocate")
       .category(event::category::operation)
@@ -89,7 +89,7 @@ inline void Allocator::deallocate(void* ptr)
       .tag("allocator_name", m_allocator->getName())
       .tag("replay", "true")
       .record();
-//#endif
+  //#endif
 
   UMPIRE_LOG(Debug, "(" << ptr << ")");
 
