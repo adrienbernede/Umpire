@@ -144,10 +144,10 @@ void ReplayInterpreter::buildOperations()
         compile_release();
       }
       else if ( m_event.name == "register_external_allocation" ) {
-        std::cout << "TODO: replay for external registration" << std::endl;
+        m_register_external_pointer++;
       }
       else if ( m_event.name == "deregister_external_allocation" ) {
-        std::cout << "TODO: add replay for external deregistration" << std::endl;
+        m_deregister_external_pointer++;
       }
       else {
         REPLAY_ERROR("Unknown Replay Operation: " << m_ops->getLine(m_line_number));
@@ -165,22 +165,22 @@ void ReplayInterpreter::buildOperations()
   m_ops = new ReplayFile{m_options};
 
   if ( ! m_options.quiet ) {
-    const std::size_t allocations_performed{m_allocate_ops};
-    const std::size_t deallocations_skipped{m_deallocate_due_to_reallocate + m_deallocate_rogue_ignored};
-    const std::size_t deallocations_performed{m_deallocate_ops - deallocations_skipped};
-    const std::size_t leaked_allocations{allocations_performed - deallocations_performed};
+    const std::size_t leaked_allocations{m_allocate_ops - m_deallocate_ops};
 
     std::cout
       << "Replay File Version: " << m_log_version_major << "." << m_log_version_minor << "." << m_log_version_patch << std::endl
       << std::setw(12) << m_make_memory_resource_ops << " makeMemoryResource operations" << std::endl
       << std::setw(12) << m_make_allocator_ops << " makeAllocator operations" << std::endl
       << std::endl
-      << std::setw(12) << allocations_performed << " allocate operations" << std::endl
-      << std::setw(12) << deallocations_performed << " deallocate performed (" << leaked_allocations << " leaked)" << std::endl
-      << std::setw(12) << deallocations_skipped << " deallocate skipped " << std::endl
-      << "    " << std::setw(12) << m_deallocate_due_to_reallocate << " skipped due to reallocate" << std::endl
-      << "    " << std::setw(12) << m_deallocate_rogue_ignored << " skipped due to being rogue" << std::endl
-      << std::endl
+      << std::setw(12) << m_allocate_ops << " allocate operations" << std::endl
+      << std::setw(12) << m_deallocate_ops << " deallocate performed (" << leaked_allocations << " leaked)" << std::endl;
+
+    if (m_deallocate_rogue_ignored) {
+      std::cout << "    " << std::setw(12) << m_deallocate_rogue_ignored << " skipped due to being rogue" << std::endl;
+    }
+    
+    std::cout << std::endl
+      << std::setw(12) << m_register_external_pointer << " external registrations (not replayed)" << std::endl
       << std::setw(12) << m_deregister_external_pointer << " external deregistrations (not replayed)" << std::endl
       << std::endl
       << std::setw(12) << m_copy_ops << " copy operations" << std::endl
@@ -194,33 +194,42 @@ void ReplayInterpreter::buildOperations()
   }
 }
 
+std::string ReplayInterpreter::printAllocatorInfo(ReplayFile::AllocatorTableEntry* allocator)
+{
+  std::stringstream ss;
+
+  ss << "Line#: " << allocator->line_number 
+    << ", argc: " << allocator->argc
+    << ", Name: " << allocator->name
+    << ", Basename: " << allocator->base_name
+    << ", Type: ";
+
+  switch (allocator->type) {
+    default: ss << "??"; break;
+    case ReplayFile::MEMORY_RESOURCE: ss << " MEMORY_RESOURCE"; break;
+    case ReplayFile::ALLOCATION_ADVISOR: ss << " ALLOCATION_ADVISOR"; break;
+    case ReplayFile::DYNAMIC_POOL_LIST: ss << " DYNAMIC_POOL_LIST"; break;
+    case ReplayFile::DYNAMIC_POOL_MAP: ss << " DYNAMIC_POOL_MAP"; break;
+    case ReplayFile::QUICKPOOL: ss << " QUICKPOOL"; break;
+    case ReplayFile::MONOTONIC: ss << " MONOTONIC"; break;
+    case ReplayFile::SLOT_POOL: ss << " SLOT_POOL"; break;
+    case ReplayFile::SIZE_LIMITER: ss << " SIZE_LIMITER"; break;
+    case ReplayFile::THREADSAFE_ALLOCATOR: ss << " THREADSAFE_ALLOCATOR"; break;
+    case ReplayFile::FIXED_POOL: ss << " FIXED_POOL"; break;
+    case ReplayFile::MIXED_POOL: ss << " MIXED_POOL"; break;
+    case ReplayFile::ALLOCATION_PREFETCHER: ss << " ALLOCATION_PREFETCHER"; break;
+    case ReplayFile::NUMA_POLICY: ss << " NUMA_POLICY"; break;
+  }
+  return ss.str();
+}
+
 void ReplayInterpreter::printAllocators(ReplayFile* rf)
 {
   auto optable = rf->getOperationsTable();
   std::cerr << rf->getInputFileName() << std::endl;
   for (std::size_t i{0}; i < optable->num_allocators; ++i) {
-    switch (optable->allocators[i].type) {
-      default: std::cerr << "?? "; break;
-      case ReplayFile::MEMORY_RESOURCE: std::cerr << " MEMORY_RESOURCE "; break;
-      case ReplayFile::ALLOCATION_ADVISOR: std::cerr << " ALLOCATION_ADVISOR "; break;
-      case ReplayFile::DYNAMIC_POOL_LIST: std::cerr << " DYNAMIC_POOL_LIST "; break;
-      case ReplayFile::DYNAMIC_POOL_MAP: std::cerr << " DYNAMIC_POOL_MAP "; break;
-      case ReplayFile::QUICKPOOL: std::cerr << " QUICKPOOL "; break;
-      case ReplayFile::MONOTONIC: std::cerr << " MONOTONIC "; break;
-      case ReplayFile::SLOT_POOL: std::cerr << " SLOT_POOL "; break;
-      case ReplayFile::SIZE_LIMITER: std::cerr << " SIZE_LIMITER "; break;
-      case ReplayFile::THREADSAFE_ALLOCATOR: std::cerr << " THREADSAFE_ALLOCATOR "; break;
-      case ReplayFile::FIXED_POOL: std::cerr << " FIXED_POOL "; break;
-      case ReplayFile::MIXED_POOL: std::cerr << " MIXED_POOL "; break;
-      case ReplayFile::ALLOCATION_PREFETCHER: std::cerr << " ALLOCATION_PREFETCHER "; break;
-      case ReplayFile::NUMA_POLICY: std::cerr << " NUMA_POLICY "; break;
-    }
-
-    std::cerr
-      << optable->allocators[i].base_name << ", "
-      << optable->allocators[i].name << std::endl;
+    std::cerr << printAllocatorInfo(&(optable->allocators[i])) << std::endl;
   }
-  std::cerr << std::endl;
 }
 
 bool ReplayInterpreter::compareOperations(ReplayInterpreter& rh)
@@ -275,7 +284,10 @@ bool ReplayInterpreter::compareOperations(ReplayInterpreter& rh)
       }
 
       if ( m_ops->getOperationsTable()->allocators[i].argc != rh.m_ops->getOperationsTable()->allocators[i].argc ) {
-        std::cerr << "AllocatorTable argc data miscompare at index " << i << std::endl;
+        std::cerr << "AllocatorTable argc data miscompare at index " << i << std::endl
+          << "    LHS: " << printAllocatorInfo(&m_ops->getOperationsTable()->allocators[i]) << std::endl
+          << "    RHS: " << printAllocatorInfo(&rh.m_ops->getOperationsTable()->allocators[i]) << std::endl
+          << std::endl;
         rval = false;
       }
 

@@ -49,6 +49,7 @@ class ReplayInterpreter {
     int m_log_version_major;
     int m_log_version_minor;
     int m_log_version_patch;
+    std::size_t m_register_external_pointer{0};
     std::size_t m_deregister_external_pointer{0};
 
     std::size_t m_make_allocator_ops{0};
@@ -59,7 +60,6 @@ class ReplayInterpreter {
     std::size_t m_set_default_allocator_ops{0};
     std::size_t m_allocate_ops{0};
     std::size_t m_deallocate_ops{0};
-    std::size_t m_deallocate_due_to_reallocate{0};
     std::size_t m_deallocate_rogue_ignored{0};
 
     std::size_t m_coalesce_ops{0};
@@ -80,6 +80,7 @@ class ReplayInterpreter {
     int getAllocatorIndex(const std::string& ref_s);
     uint64_t getPointer(std::string ptr_name);
     void printAllocators(ReplayFile* optable);
+    std::string printAllocatorInfo(ReplayFile::AllocatorTableEntry* allocator);
 };
 
 #include "ReplayInterpreter.inl"
