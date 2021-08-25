@@ -495,19 +495,19 @@ void ReplayInterpreter::compile_make_allocator()
     m_ops->copyString(base_allocator_name, alloc->base_name);
 
     // Now grab the optional fields
-    if (m_event.string_args.find("arg4") != m_event.string_args.end()) {
+    if (m_event.numeric_args.find("arg3") != m_event.numeric_args.end()) {
       alloc->argc = 4;    // ignore potential heuristic parameters
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
       alloc->argv.pool.min_alloc_size = m_event.numeric_args["arg2"];
       alloc->argv.pool.alignment = m_event.numeric_args["arg3"];
     }
     else if (m_event.numeric_args.find("arg2") != m_event.numeric_args.end()) {
-      alloc->argc = 3;    // ignore potential heuristic parameters
+      alloc->argc = 3;
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
       alloc->argv.pool.min_alloc_size = m_event.numeric_args["arg2"];
     }
     else if (m_event.numeric_args.find("arg1") != m_event.numeric_args.end()) {
-      alloc->argc = 2;    // ignore potential heuristic parameters
+      alloc->argc = 2;
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
     }
   }
@@ -516,19 +516,19 @@ void ReplayInterpreter::compile_make_allocator()
     m_ops->copyString(base_allocator_name, alloc->base_name);
 
     // Now grab the optional fields
-    if (m_event.string_args.find("arg4") != m_event.string_args.end()) {
+    if (m_event.numeric_args.find("arg3") != m_event.numeric_args.end()) {
       alloc->argc = 4;    // ignore potential heuristic parameters
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
       alloc->argv.pool.min_alloc_size = m_event.numeric_args["arg2"];
       alloc->argv.pool.alignment = m_event.numeric_args["arg3"];
     }
     else if (m_event.numeric_args.find("arg2") != m_event.numeric_args.end()) {
-      alloc->argc = 3;    // ignore potential heuristic parameters
+      alloc->argc = 3;
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
       alloc->argv.pool.min_alloc_size = m_event.numeric_args["arg2"];
     }
     else if (m_event.numeric_args.find("arg1") != m_event.numeric_args.end()) {
-      alloc->argc = 2;    // ignore potential heuristic parameters
+      alloc->argc = 2;
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
     }
   }
@@ -537,19 +537,19 @@ void ReplayInterpreter::compile_make_allocator()
     m_ops->copyString(base_allocator_name, alloc->base_name);
 
     // Now grab the optional fields
-    if (m_event.string_args.find("arg4") != m_event.string_args.end()) {
-      alloc->argc = 4;    // ignore potential heuristic parameters
+    if (m_event.numeric_args.find("arg3") != m_event.numeric_args.end()) {
+      alloc->argc = 4;    // ignore potential heuristic parameters found in arg4
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
       alloc->argv.pool.min_alloc_size = m_event.numeric_args["arg2"];
       alloc->argv.pool.alignment = m_event.numeric_args["arg3"];
     }
     else if (m_event.numeric_args.find("arg2") != m_event.numeric_args.end()) {
-      alloc->argc = 3;    // ignore potential heuristic parameters
+      alloc->argc = 3;
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
       alloc->argv.pool.min_alloc_size = m_event.numeric_args["arg2"];
     }
     else if (m_event.numeric_args.find("arg1") != m_event.numeric_args.end()) {
-      alloc->argc = 2;    // ignore potential heuristic parameters
+      alloc->argc = 2;
       alloc->argv.pool.initial_alloc_size = m_event.numeric_args["arg1"];
     }
   }
@@ -557,16 +557,19 @@ void ReplayInterpreter::compile_make_allocator()
     alloc->type = ReplayFile::rtype::MONOTONIC;
     m_ops->copyString(base_allocator_name, alloc->base_name);
     alloc->argv.monotonic_pool.capacity = m_event.numeric_args["arg1"];
+    alloc->argc++;
   }
   else if ( type == "umpire::strategy::SlotPool" ) {
     alloc->type = ReplayFile::rtype::SLOT_POOL;
     m_ops->copyString(base_allocator_name, alloc->base_name);
     alloc->argv.slot_pool.slots = m_event.numeric_args["arg1"];
+    alloc->argc++;
   }
   else if ( type == "umpire::strategy::SizeLimiter" ) {
     alloc->type = ReplayFile::rtype::SIZE_LIMITER;
     m_ops->copyString(base_allocator_name, alloc->base_name);
     alloc->argv.size_limiter.size_limit = m_event.numeric_args["arg1"];
+    alloc->argc++;
   }
   else if ( type == "umpire::strategy::ThreadSafeAllocator" ) {
     alloc->type = ReplayFile::rtype::THREADSAFE_ALLOCATOR;
@@ -576,11 +579,12 @@ void ReplayInterpreter::compile_make_allocator()
     alloc->type = ReplayFile::rtype::FIXED_POOL;
     m_ops->copyString(base_allocator_name, alloc->base_name);
     alloc->argv.fixed_pool.object_bytes = m_event.numeric_args["arg1"];
+    alloc->argc++;
 
     // Now grab the optional fields
     if (m_event.numeric_args.find("arg2") != m_event.numeric_args.end()) {
-      alloc->argc = 2;
       alloc->argv.fixed_pool.objects_per_pool = m_event.numeric_args["arg2"];
+      alloc->argc++;
     }
   }
   else if ( type == "umpire::strategy::MixedPool" ) {
