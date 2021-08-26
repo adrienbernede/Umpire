@@ -4,9 +4,10 @@
 //
 // SPDX-License-Identifier: (MIT)
 //////////////////////////////////////////////////////////////////////////////
-#include "umpire/util/MPI.hpp"
 
 #include "umpire/config.hpp"
+#include "umpire/event/event.hpp"
+#include "umpire/util/MPI.hpp"
 #include "umpire/util/Macros.hpp"
 
 #if defined(UMPIRE_ENABLE_MPI)

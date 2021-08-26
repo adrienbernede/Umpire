@@ -51,7 +51,7 @@ if (ENABLE_NUMA)
     numa.cpp)
 endif ()
 
-set (umpire_util_depends camp umpire_tpl_judy)
+set (umpire_util_depends camp umpire_event umpire_tpl_judy)
 
 if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set (umpire_util_depends
@@ -97,6 +97,10 @@ target_include_directories(
   $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>)
+
+if(ENABLE_CUDA)
+  blt_patch_target(NAME umpire_util DEPENDS_ON cuda_runtime)
+endif()
 
 install(FILES
   ${umpire_util_headers}
