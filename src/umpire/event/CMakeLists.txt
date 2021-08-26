@@ -8,14 +8,12 @@
 set (umpire_event_headers
   event.hpp
   event_store.hpp
-  quest_database.hpp
   event_store_recorder.hpp
   json_file_store.hpp
   recorder_factory.hpp)
 
 set (umpire_event_sources
   event_store_recorder.cpp
-  quest_database.cpp
   json_file_store.cpp
   recorder_factory.cpp)
 
