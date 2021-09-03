@@ -53,24 +53,6 @@ endif ()
 
 set (umpire_util_depends camp umpire_event umpire_tpl_judy)
 
-if(ENABLE_CUDA)
-  blt_add_target_definitions(
-    TO camp
-    SCOPE INTERFACE
-    TARGET_DEFINITIONS CAMP_HAVE_CUDA)
-
-  blt_patch_target(NAME camp DEPENDS_ON cuda_runtime)
-endif()
-
-if(ENABLE_HIP)
-  blt_add_target_definitions(
-    TO camp
-    SCOPE INTERFACE
-    TARGET_DEFINITIONS CAMP_HAVE_HIP)
-
-  blt_patch_target(NAME camp DEPENDS_ON hip_runtime)
-endif()
-
 if (NOT "${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
   set (umpire_util_depends
     ${umpire_util_depends}
