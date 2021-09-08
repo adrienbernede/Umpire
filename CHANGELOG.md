@@ -10,6 +10,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ### Added
 
+- Added support for Caliper data tracker when configured with ENABLE_CALIPER=On.
+
 ### Changed
 
 - Reorganized cmake object library for c/fortran interface. NOTE: This is a breaking
