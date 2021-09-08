@@ -221,20 +221,7 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
         entries = super(Umpire, self).initconfig_mpi_entries()
         entries.append(cmake_cache_option("ENABLE_MPI", '+mpi' in spec))
 
-<<<<<<< HEAD
-        cfg.write(cmake_cache_option("ENABLE_CALIPER", '+caliper' in spec))
-        if '+caliper' in spec:
-            cfg.write(cmake_cache_entry("caliper_DIR", spec['caliper'].prefix))
-
-        #######################
-        # Close and save
-        #######################
-        cfg.write("\n")
-        cfg.close()
-=======
         return entries
->>>>>>> develop
-
 
     def initconfig_package_entries(self):
         spec = self.spec
@@ -253,6 +240,9 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
         entries.append(cmake_cache_option("ENABLE_NUMA", '+numa' in spec))
         entries.append(cmake_cache_option("ENABLE_OPENMP", '+openmp' in spec))
         entries.append(cmake_cache_option("ENABLE_IPC_SHARED_MEMORY", '+ipc_shmem' in spec))
+        entries.append(cmake_cache_option("ENABLE_CALIPER", '+caliper' in spec))
+        if '+caliper' in spec:
+            entries.append(cmake_cache_entry("caliper_DIR", spec['caliper'].prefix))
         
         return entries
 
