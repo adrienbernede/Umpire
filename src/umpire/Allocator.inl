@@ -67,8 +67,8 @@ inline void* Allocator::allocate(const std::string& name, std::size_t bytes)
   UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
                 << m_allocator << "\", \"size\": " << bytes << ", \"name\": \"" << name << "\""
                 << " }, \"result\": { \"memory_ptr\": \"" << ret << "\" }");
-  
-    UMPIRE_CALIPER_TRACK(ret, name.c_str(), bytes);
+
+  UMPIRE_CALIPER_TRACK(ret, name.c_str(), bytes);
 
   return ret;
 }

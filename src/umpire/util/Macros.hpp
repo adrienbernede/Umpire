@@ -21,7 +21,6 @@
 #include "caliper/cali_datatracker.h"
 #endif
 
-
 #define UMPIRE_ASSERT(condition) assert(condition)
 
 #ifdef UMPIRE_ENABLE_LOGGING
