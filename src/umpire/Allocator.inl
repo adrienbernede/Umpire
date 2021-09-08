@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2016-20, Lawrence Livermore National Security, LLC and Umpire
+// Copyright (c) 2016-21, Lawrence Livermore National Security, LLC and Umpire
 // project contributors. See the COPYRIGHT file for details.
 //
 // SPDX-License-Identifier: (MIT)
@@ -18,12 +18,12 @@ inline void* Allocator::allocate(std::size_t bytes)
 {
   void* ret = nullptr;
 
-  umpire_ver_5_found = 0;
+  UMPIRE_ASSERT(UMPIRE_VERSION_OK());
 
   UMPIRE_LOG(Debug, "(" << bytes << ")");
 
-  UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
-                << m_allocator << "\", \"size\": " << bytes << " }");
+  UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \"" << m_allocator
+                                                                                << "\", \"size\": " << bytes << " }");
 
   if (0 == bytes) {
     ret = allocateNull();
@@ -36,11 +36,10 @@ inline void* Allocator::allocate(std::size_t bytes)
   }
 
   UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
-                << m_allocator << "\", \"size\": " << bytes
-                << " }, \"result\": { \"memory_ptr\": \"" << ret << "\" }");
-  
+                << m_allocator << "\", \"size\": " << bytes << " }, \"result\": { \"memory_ptr\": \"" << ret << "\" }");
+
   UMPIRE_CALIPER_TRACK(ret, getName().c_str(), bytes);
-  
+
   return ret;
 }
 
@@ -48,12 +47,9 @@ inline void* Allocator::allocate(const std::string& name, std::size_t bytes)
 {
   void* ret = nullptr;
 
-  UMPIRE_LOG(Debug, "(" << bytes << ")");
+  UMPIRE_ASSERT(UMPIRE_VERSION_OK());
 
-  if (m_allocator->getTraits().resource
-              != MemoryResourceTraits::resource_type::shared) {
-    UMPIRE_ERROR("This allocator does not support named allocations");
-  }
+  UMPIRE_LOG(Debug, "(" << bytes << ")");
 
   UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
                 << m_allocator << "\", \"size\": " << bytes << ", \"name\": \"" << name << "\" }");
@@ -65,23 +61,22 @@ inline void* Allocator::allocate(const std::string& name, std::size_t bytes)
   }
 
   if (m_tracking) {
-    registerAllocation(ret, bytes, m_allocator);
+    registerAllocation(ret, bytes, m_allocator, name);
   }
 
   UMPIRE_REPLAY("\"event\": \"allocate\", \"payload\": { \"allocator_ref\": \""
                 << m_allocator << "\", \"size\": " << bytes << ", \"name\": \"" << name << "\""
                 << " }, \"result\": { \"memory_ptr\": \"" << ret << "\" }");
   
-    UMPIRE_CALIPER_TRACK(ret, getName().c_str(), bytes);
+    UMPIRE_CALIPER_TRACK(ret, name.c_str(), bytes);
 
   return ret;
 }
 
 inline void Allocator::deallocate(void* ptr)
 {
-  UMPIRE_REPLAY(
-      "\"event\": \"deallocate\", \"payload\": { \"allocator_ref\": \""
-      << m_allocator << "\", \"memory_ptr\": \"" << ptr << "\" }");
+  UMPIRE_REPLAY("\"event\": \"deallocate\", \"payload\": { \"allocator_ref\": \""
+                << m_allocator << "\", \"memory_ptr\": \"" << ptr << "\" }");
 
   UMPIRE_LOG(Debug, "(" << ptr << ")");
 
@@ -93,11 +88,11 @@ inline void Allocator::deallocate(void* ptr)
   } else {
     if (m_tracking) {
       auto record = deregisterAllocation(ptr, m_allocator);
-      if (! deallocateNull(ptr)) {
-        m_allocator->deallocate(ptr,record.size);
-      } 
+      if (!deallocateNull(ptr)) {
+        m_allocator->deallocate(ptr, record.size);
+      }
     } else {
-      if (! deallocateNull(ptr)) {
+      if (!deallocateNull(ptr)) {
         m_allocator->deallocate(ptr);
       }
     }
