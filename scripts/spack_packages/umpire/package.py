@@ -67,7 +67,7 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
     variant('sanitizer_tests', default=False, description='Enable address sanitizer tests')
     variant('caliper', default=False, description='Enable Caliper support')
 
-    depends_on('caliper', when='+caliper')
+    depends_on('caliper~libunwind', when='+caliper')
     depends_on('caliper+cuda', when='+caliper+cuda')
 
     depends_on('cmake@3.14:', type='build')
