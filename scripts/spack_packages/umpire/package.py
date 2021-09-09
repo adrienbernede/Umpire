@@ -242,7 +242,7 @@ class Umpire(CachedCMakePackage, CudaPackage, ROCmPackage):
         entries.append(cmake_cache_option("ENABLE_IPC_SHARED_MEMORY", '+ipc_shmem' in spec))
         entries.append(cmake_cache_option("ENABLE_CALIPER", '+caliper' in spec))
         if '+caliper' in spec:
-            entries.append(cmake_cache_entry("caliper_DIR", spec['caliper'].prefix))
+            entries.append(cmake_cache_path("caliper_DIR", spec['caliper'].prefix))
         
         return entries
 
