@@ -12,7 +12,8 @@ Creating a Device Allocator
 
 To create a DeviceAllocator, users can call the :class:`umpire::make_device_allocator` host function.
 This function takes an allocator, the total amount of memory the DeviceAllocator will have, and a name
-for the new DeviceAllocator object, as shown below.
+for the new DeviceAllocator object, as shown below. Currently, a maximum of 64 DeviceAllocators can be
+created at a time.
 
 .. literalinclude:: ../../../examples/device-allocator.cpp
    :start-after: _sphinx_tag_make_dev_allocator_start
@@ -47,16 +48,11 @@ And next is an example of using the **name** instead:
 With the :class:`umpire::get_device_allocator` function, there is no need to keep track of the DeviceAllocator.
 Users can instead use this function to obtain it inside whichever kernel they need.
 
-Under the hood, the :class:`umpire::getDeviceAllocator` uses global arrays which can be accessed by both 
-the host and device. The global array is indexed by DeviceAllocator ID. Because we are using global arrays 
-on host and device, the arrays need to be "set up" after the DeviceAllocators are created, but before any 
-kernels are called. This process is done by calling the ``UMPIRE_SET_UP_DEVICE_ALLOCS()`` macro. This just 
-ensures that the host and device global arrays are updated and pointing at the same memory. Below is an example:
-
-.. literalinclude:: ../../../examples/device-allocator.cpp
-   :start-after: _sphinx_tag_macro_start
-   :end-before: _sphinx_tag_macro_end
-   :language: C++
+Under the hood, the :class:`umpire::get_device_allocator` uses global arrays which can be accessed by both 
+the host and device. The global array is indexed by DeviceAllocator ID, which is returned by :class:`DeviceAllocator::getID()`. 
+Because we are using global arrays on host and device, the arrays need to be "set up" after the DeviceAllocators 
+are created, but before any kernels are called. This process is done by calling the ``UMPIRE_SET_UP_DEVICE_ALLOCS()`` 
+macro. This just ensures that the host and device global arrays are updated and pointing at the same memory.
 
 .. note::
    In order to use the full capabilities of the DeviceAllocator, relocatable device code must be enabled.
