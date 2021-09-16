@@ -98,10 +98,6 @@ target_include_directories(
   $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>
   $<INSTALL_INTERFACE:include>)
 
-if(ENABLE_CUDA)
-  blt_patch_target(NAME umpire_util DEPENDS_ON cuda_runtime)
-endif()
-
 install(FILES
   ${umpire_util_headers}
   DESTINATION include/umpire/util)
