@@ -57,8 +57,21 @@ macro. This just ensures that the host and device global arrays are updated and 
 .. note::
    In order to use the full capabilities of the DeviceAllocator, relocatable device code must be enabled.
 
-Currently, the memory that has been used with the DeviceAllocator is only freed at the end of a program when the 
-ResourceManager is torn down. However, there will be a :class:`DeviceAllocator::reset()` method implemented soon 
-which will allow users to overwrite old data.
+Resetting Memory on the DeviceAllocator
+---------------------------------------
+
+The memory that has been used with the DeviceAllocator is only freed at the end of a program when the 
+ResourceManager is torn down. However, there is a way to overwrite old or outdated data. Users can call
+the :class:`DeviceAllocator::reset()` method which will allows old data to be overwritten. Below is an example:
+
+.. literalinclude:: ../../../examples/device-allocator.cpp
+   :start-after: _sphinx_tag_reset_start
+   :end-before: _sphinx_tag_reset_end
+   :language: C++
+
+The above code snippet shows the ``reset()`` function being called from the host. Calling the function from the host
+utilizes the ResourceManager and the ``memset`` operation under the hood. Therefore, there is some kind of 
+synchronization guaranteed. However, if the ``reset()`` function is called on the device, there is no synchronization
+guaranteed, so the user must be very careful not to reset memory that other GPU threads still need.
 
 .. literalinclude:: ../../../examples/device-allocator.cpp
