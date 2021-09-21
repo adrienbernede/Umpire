@@ -22,5 +22,7 @@ Device Allocator
 
 The Device Allocator is an allocator specifically designed to be used on the GPU.
 
-Currently, the Device Allocator is only supported with CUDA, but HIP support is coming soon.
-More documentation on how to create and use Device Allocators can be found `here <https://umpire.readthedocs.io/en/develop/features/device_allocators.html>`_.
+The Device Allocator is created with a `size` parameter that specifies the maximum amount of memory
+available for the Device Allocator to use. Hence, the Device Allocator doesn't actually allocate
+new memory when the ``allocate`` member function is called. Instead, it increments a pointer
+atomically to the relevant data.

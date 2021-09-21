@@ -47,12 +47,12 @@ __global__ void my_other_kernel(double** data_ptr)
 
 int main(int argc, char const* argv[])
 {
-  auto& rm = umpire::ResourceManager::getInstance();
   auto resource = camp::resources::Resource{resource_type{}};
 
   // Create my allocators.
-  auto allocator = rm.getAllocator("UM");
   // _sphinx_tag_make_dev_allocator_start
+  auto& rm = umpire::ResourceManager::getInstance();
+  auto allocator = rm.getAllocator("UM");
   auto device_allocator = umpire::make_device_allocator(allocator, 8, "my_device_alloc");
   // _sphinx_tag_make_dev_allocator_end
 
