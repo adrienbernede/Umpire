@@ -16,7 +16,7 @@
 
 namespace umpire {
 
-__host__ DeviceAllocator::DeviceAllocator(Allocator allocator, size_t size, const std::string old_name, size_t id)
+__host__ DeviceAllocator::DeviceAllocator(Allocator allocator, size_t size, const std::string& old_name, size_t id)
     : m_allocator(allocator),
       m_id(id),
       m_ptr(static_cast<char*>(m_allocator.allocate(size))),
@@ -29,10 +29,9 @@ __host__ DeviceAllocator::DeviceAllocator(Allocator allocator, size_t size, cons
   m_counter = static_cast<unsigned int*>(device_alloc.allocate(sizeof(unsigned int)));
   rm.memset(m_counter, 0);
 
-  char name[old_name.length()];
-  strcpy(name, old_name.c_str());
-
-  memset(m_name, '\0', strlen(name) + 1);
+  // convert the string name to a char name
+  const char* name = old_name.c_str();
+  memset(m_name, '\0', old_name.length() + 1);
   int i = 0;
   do {
     m_name[i] = name[i];
@@ -62,10 +61,12 @@ __host__ void DeviceAllocator::destroy()
   auto& rm = umpire::ResourceManager::getInstance();
   auto device_alloc = rm.getAllocator(umpire::resource::Device);
 
-  if (m_counter != nullptr)
+  if (m_counter != nullptr) {
     device_alloc.deallocate(m_counter);
-  if (m_ptr != nullptr)
+  }
+  if (m_ptr != nullptr) {
     m_allocator.deallocate(m_ptr);
+  }
 }
 
 __device__ void* DeviceAllocator::allocate(size_t size)
@@ -94,6 +95,21 @@ __host__ __device__ bool DeviceAllocator::isInitialized()
     return true;
   }
   return false;
+}
+
+__host__ __device__ void DeviceAllocator::reset()
+{
+  // Set m_counter back to zero
+#if !defined(__CUDA_ARCH__)
+  auto& rm = umpire::ResourceManager::getInstance();
+  rm.memset(m_counter, 0);
+#else
+  unsigned int assumed, old;
+  do {
+    assumed = *m_counter;
+    old = atomicCAS(m_counter, assumed, 0);
+  } while (assumed != old);
+#endif
 }
 
 } // end of namespace umpire

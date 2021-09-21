@@ -13,6 +13,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - Added a getDeviceAllocator function that allows users to get a DeviceAllocator object
   from the kernel without explicitly passing the allocator to the kernel first.
 
+- Added a reset function to the DeviceAllocator so that old data can be rewritten.
+
 - Added documentation of the DeviceAllocator.
 
 ### Changed
@@ -27,6 +29,8 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 
 ### Removed
 
+- Removed deprecated DynamicPoolMap and DynamicPool alias.
+
 - Remove deprecated registerAllocator and isAllocatorRegistered methods.
 
 - Removed unneeded hip dependency in the tests/debug/ CMake file.
@@ -38,6 +42,9 @@ Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to
 - Fix warning caused by ignoring posix_memalign return value.
 
 - Use C++17 for SYCL backend.
+
+- Fixed a cmake install config issue so that now users can find a package of Umpire
+  with a version constraint.
 
 ## [v6.0.0 - 2021-08-18]
 

@@ -28,7 +28,7 @@ class DeviceAllocator {
    * \param id ID associated with this DeviceAllocator object. ID will be used
    *   to reference UMPIRE_DEV_ALLOCS array if necessary.
    */
-  __host__ DeviceAllocator(Allocator allocator, size_t size, const std::string name, size_t id);
+  __host__ DeviceAllocator(Allocator allocator, size_t size, const std::string& name, size_t id);
 
   __host__ __device__ ~DeviceAllocator();
 
@@ -70,6 +70,16 @@ class DeviceAllocator {
    * \return Returns true if object has been initialized, false otherwise.
    */
   __host__ __device__ bool isInitialized();
+
+  /*
+   * \brief Reset the DeviceAllocator counter pointer back to original
+   *  starting point. This will effectively allow the DeviceAllocator to
+   *  start overwritting old data.
+   *
+   *  NOTE: USER BEWARE!! If used incorrectly, this function could end up
+   *  causing severe problems. Use with care.
+   */
+  __host__ __device__ void reset();
 
  private:
   umpire::Allocator m_allocator;
