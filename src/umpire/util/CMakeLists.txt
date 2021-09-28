@@ -83,6 +83,12 @@ if (UMPIRE_ENABLE_OPENMP_TARGET)
     openmp)
 endif ()
 
+if (UMPIRE_ENABLE_CUDA)
+  set (umpire_util_depends
+    ${umpire_util_depends}
+    cuda_runtime)
+endif ()
+
 
 blt_add_library(
   NAME umpire_util
